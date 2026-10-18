@@ -5,3 +5,4 @@ dist
 .vite
 dist-ssr
 .img2threejs
+*.tsbuildinfo
