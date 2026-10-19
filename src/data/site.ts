@@ -21,13 +21,6 @@ export const company = {
   geo: { lat: 48.4258, lng: 9.9589 },
 } as const
 
-export const stats = [
-  { value: 30, suffix: '+', label: 'Jahre Erfahrung' },
-  { value: 28, suffix: '', label: 'Länder im Netz' },
-  { value: 6, suffix: '', label: 'Fahrzeugtypen' },
-  { value: 3, suffix: '', label: 'Zertifizierungen' },
-] as const
-
 export const certifications = [
   {
     code: 'ISO 9001',
