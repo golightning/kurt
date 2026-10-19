@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Entwurf C — Maßstab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Archivo:wght@700;900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bp:#0b1017; --bp-2:#0f1621; --grid:rgba(126,170,214,.11); --grid-b:rgba(126,170,214,.2);
+    --fg:#e8f1fa; --muted:#9fb6cc; --faint:#8aa3bb; --cad:#7eaad6;
+    --red:#e20613; --red-text:#ff5146;
+    --mono:'IBM Plex Mono',ui-monospace,monospace; --disp:'Archivo',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bp);color:var(--fg);font-family:var(--mono);font-size:13px;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px),
+      linear-gradient(var(--grid-b) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid-b) 1px,transparent 1px);
+    background-size:24px 24px,24px 24px,120px 120px,120px 120px}
+  .shell{max-width:1200px;margin:0 auto;padding:0 26px}
+  .lbl{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+
+  header{border-bottom:1px solid var(--grid-b);background:rgba(11,16,23,.86);
+    backdrop-filter:blur(10px);position:sticky;top:0;z-index:20}
+  .hdr{display:flex;align-items:center;justify-content:space-between;gap:22px;height:70px}
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand img{height:30px}
+  .brand b{font-family:var(--disp);font-weight:900;letter-spacing:.17em;font-size:14px}
+  nav{display:flex;gap:24px}
+  nav a{color:var(--muted);text-decoration:none;font-size:10.5px;letter-spacing:.17em;text-transform:uppercase}
+  nav a[aria-current]{color:var(--red-text)}
+  .cta{border:1px solid var(--red);color:var(--red-text);text-decoration:none;padding:9px 16px;
+    font-size:10.5px;letter-spacing:.17em;text-transform:uppercase}
+
+  .hero{padding:52px 0 26px}
+  h1{font-family:var(--disp);font-weight:900;font-size:clamp(2.2rem,6vw,4.8rem);line-height:.96;
+    letter-spacing:-.035em;margin:14px 0 0;text-transform:uppercase;hyphens:auto}
+  h1 em{font-style:normal;color:var(--red-text)}
+  .lede{margin:20px 0 0;max-width:52ch;line-height:1.75;color:var(--muted);font-size:13.5px}
+
+  /* Technische Zeichnung */
+  .draw{margin:34px 0 0;border:1px solid var(--grid-b);background:rgba(15,22,33,.6);padding:18px}
+  .draw svg{width:100%;height:auto;display:block}
+  .draw-meta{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    border-top:1px solid var(--grid-b);margin-top:14px;padding-top:12px}
+
+  /* Datenzeilen */
+  .specs{margin-top:46px;border-top:1px solid var(--grid-b)}
+  .spec{display:grid;grid-template-columns:54px 1fr 190px 130px;align-items:baseline;
+    padding:15px 10px;border-bottom:1px solid var(--grid-b);transition:background .18s}
+  .spec:hover{background:rgba(126,170,214,.05)}
+  .spec .n{color:var(--red-text)}
+  .spec .t{font-family:var(--disp);font-weight:700;font-size:16px}
+  .spec .m{color:var(--cad);font-variant-numeric:tabular-nums}
+  .spec .u{text-align:right;font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--faint)}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--grid-b);margin:44px 0 0}
+  .kpis>div{padding:22px 16px;border-right:1px solid var(--grid-b)}
+  .kpis>div:last-child{border-right:0}
+  .kpis .num{font-family:var(--disp);font-weight:900;font-size:38px;line-height:1;
+    letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--fg)}
+
+  footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    padding:26px 0 48px;color:var(--faint);font-size:9.5px;letter-spacing:.17em;text-transform:uppercase}
+
+  @media(max-width:880px){
+    nav{display:none}
+    .spec{grid-template-columns:40px 1fr;row-gap:5px}
+    .spec .m,.spec .u{grid-column:2;text-align:left}
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .kpis>div:nth-child(2n){border-right:0}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="shell hdr">
+    <span class="brand"><img src="/entwuerfe/mark-brand.svg" alt="" /><b>KURT</b></span>
+    <nav><a href="#" aria-current="page">Start</a><a href="#">Leistungen</a>
+      <a href="#">Fuhrpark</a><a href="#">Kontakt</a></nav>
+    <a class="cta" href="#">Anfrage</a>
+  </div>
+</header>
+
+<div class="shell">
+  <section class="hero">
+    <div class="lbl">Blatt 01 · Textil-Koffersattel · XL-CODE · M 1:50</div>
+    <h1>13,60 Meter<br /><em>exakt geplant</em></h1>
+    <p class="lede">
+      Jede Ladung hat ein Maß. Wir kennen unsere: 2,75 m Innenhöhe für dreifach gehängte
+      Oberteile, Hebebühne für Zustellung ohne Rampe, lückenlose Temperaturprotokolle.
+      Spedition aus Ulm, seit über 30 Jahren.
+    </p>
+
+    <figure class="draw">
+      <svg viewBox="0 0 1000 310" role="img" aria-label="Rissdarstellung Textil-Koffersattel mit Maßlinien">
+        <defs>
+          <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#7eaad6"/>
+          </marker>
+          <marker id="al" markerWidth="9" markerHeight="9" refX="1" refY="4.5" orient="auto">
+            <path d="M9,0 L0,4.5 L9,9 z" fill="#7eaad6"/>
+          </marker>
+        </defs>
+
+        <!-- Maßlinie Laenge -->
+        <line x1="120" y1="36" x2="930" y2="36" stroke="#7eaad6" stroke-width="1"
+              marker-start="url(#al)" marker-end="url(#ar)"/>
+        <line x1="120" y1="28" x2="120" y2="92" stroke="#7eaad6" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="930" y1="28" x2="930" y2="92" stroke="#7eaad6" stroke-width="1" stroke-dasharray="3 3"/>
+        <rect x="462" y="22" width="126" height="26" fill="#0b1017"/>
+        <text x="525" y="41" fill="#e8f1fa" font-family="IBM Plex Mono,monospace" font-size="19"
+              font-weight="500" text-anchor="middle">13,60 m</text>
+
+        <!-- Aufbau -->
+        <rect x="120" y="92" width="810" height="150" fill="none" stroke="#e8f1fa" stroke-width="2"/>
+        <!-- Haengestangen -->
+        <g stroke="#e20613" stroke-width="2.5" opacity="0.95">
+          <line x1="175" y1="112" x2="175" y2="232"/><line x1="235" y1="112" x2="235" y2="232"/>
+          <line x1="295" y1="112" x2="295" y2="232"/><line x1="355" y1="112" x2="355" y2="232"/>
+          <line x1="415" y1="112" x2="415" y2="232"/><line x1="475" y1="112" x2="475" y2="232"/>
+          <line x1="535" y1="112" x2="535" y2="232"/><line x1="595" y1="112" x2="595" y2="232"/>
+          <line x1="655" y1="112" x2="655" y2="232"/><line x1="715" y1="112" x2="715" y2="232"/>
+          <line x1="775" y1="112" x2="775" y2="232"/><line x1="835" y1="112" x2="835" y2="232"/>
+        </g>
+        <!-- Hoehenebenen der 3-fach Haengung -->
+        <g stroke="#7eaad6" stroke-width="1" stroke-dasharray="5 4" opacity="0.65">
+          <line x1="130" y1="132" x2="920" y2="132"/>
+          <line x1="130" y1="172" x2="920" y2="172"/>
+          <line x1="130" y1="212" x2="920" y2="212"/>
+        </g>
+        <!-- Zugmaschine -->
+        <path d="M120,242 L70,242 L70,170 L96,170 L112,206 L120,206 Z" fill="none" stroke="#e8f1fa" stroke-width="2"/>
+        <!-- Raeder -->
+        <g fill="none" stroke="#e8f1fa" stroke-width="2">
+          <circle cx="92" cy="258" r="16"/><circle cx="800" cy="258" r="16"/><circle cx="852" cy="258" r="16"/>
+        </g>
+        <line x1="70" y1="274" x2="930" y2="274" stroke="#7eaad6" stroke-width="1" opacity="0.5"/>
+
+        <!-- Maßlinie Hoehe -->
+        <line x1="962" y1="92" x2="962" y2="242" stroke="#7eaad6" stroke-width="1"
+              marker-start="url(#al)" marker-end="url(#ar)"/>
+        <line x1="930" y1="92" x2="970" y2="92" stroke="#7eaad6" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="930" y1="242" x2="970" y2="242" stroke="#7eaad6" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="952" y="172" fill="#e8f1fa" font-family="IBM Plex Mono,monospace" font-size="17"
+              font-weight="500" text-anchor="middle" transform="rotate(-90 952 172)">2,75 m</text>
+
+        <text x="130" y="300" fill="#8aa3bb" font-family="IBM Plex Mono,monospace"
+              font-size="11" letter-spacing="2">3-FACH HÄNGUNG · 12 STANGEN · XL-CODE</text>
+      </svg>
+      <div class="draw-meta">
+        <span class="lbl">Gez. KURT · Ulm</span>
+        <span class="lbl">Blatt 01 von 06</span>
+        <span class="lbl">Maßstab 1:50</span>
+      </div>
+    </figure>
+  </section>
+
+  <div class="lbl" style="margin-top:46px">Fuhrpark — Stückliste</div>
+  <div class="specs">
+    <div class="spec"><span class="n">01</span><span class="t">Textil-Koffersattel</span>
+      <span class="m">13,60 × 2,45 × 2,75 m</span><span class="u">XL-Code</span></div>
+    <div class="spec"><span class="n">02</span><span class="t">Koffersattel m. Hebebühne</span>
+      <span class="m">13,60 m · 1.500 kg</span><span class="u">Ohne Rampe</span></div>
+    <div class="spec"><span class="n">03</span><span class="t">Kühlauflieger</span>
+      <span class="m">−20 °C bis +25 °C</span><span class="u">Frisch &amp; TK</span></div>
+    <div class="spec"><span class="n">04</span><span class="t">12 t LKW</span>
+      <span class="m">7,20 m Ladefläche</span><span class="u">Nahverkehr</span></div>
+    <div class="spec"><span class="n">05</span><span class="t">7,49 t LKW</span>
+      <span class="m">6,10 m Ladefläche</span><span class="u">Innenstadt</span></div>
+    <div class="spec"><span class="n">06</span><span class="t">Sattelzugmaschine</span>
+      <span class="m">Euro 6</span><span class="u">Fernverkehr</span></div>
+  </div>
+
+  <div class="kpis">
+    <div><div class="num">30+</div><div class="lbl" style="margin-top:9px">Jahre Erfahrung</div></div>
+    <div><div class="num">28</div><div class="lbl" style="margin-top:9px">Länder im Netz</div></div>
+    <div><div class="num">6</div><div class="lbl" style="margin-top:9px">Fahrzeugtypen</div></div>
+    <div><div class="num">3</div><div class="lbl" style="margin-top:9px">Zertifizierungen</div></div>
+  </div>
+
+  <footer>
+    <span>KURT Internationale Transporte GmbH · 89081 Ulm</span>
+    <span>Entwurf C — Maßstab</span>
+  </footer>
+</div>
+
+</body>
+</html>

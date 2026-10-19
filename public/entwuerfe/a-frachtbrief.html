@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Entwurf A — Frachtbrief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Archivo:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#f2efe8; --paper-2:#e8e4da; --ink:#15150f; --ink-2:#4a4a42;
+    --faint:#6b6b60; --rule:#c9c4b6; --red:#e20613; --red-text:#c00510; --slate:#708296;
+    --mono:'IBM Plex Mono',ui-monospace,monospace; --disp:'Archivo',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--mono);
+    font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .sheet{max-width:1200px;margin:0 auto;padding:0 20px;
+    border-left:1px solid var(--rule);border-right:1px solid var(--rule);min-height:100vh;background:
+      repeating-linear-gradient(90deg,transparent 0 calc(100%/12 - 1px),rgba(201,196,182,.26) calc(100%/12 - 1px) calc(100%/12))}
+  .rule{border-top:1px solid var(--rule)}
+  .rule-hvy{border-top:2px solid var(--ink)}
+  .lbl{font-size:9.5px;letter-spacing:.19em;text-transform:uppercase;color:var(--faint)}
+  .val{font-size:13px;font-weight:500}
+
+  /* Kopfzeile wie ein Formularkopf */
+  header{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;padding:16px 0}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand img{height:34px;width:auto}
+  .brand b{font-family:var(--disp);font-weight:900;letter-spacing:.14em;font-size:15px}
+  nav{display:flex;gap:22px;justify-content:center;flex-wrap:wrap}
+  nav a{color:var(--ink-2);text-decoration:none;font-size:10.5px;letter-spacing:.17em;text-transform:uppercase}
+  nav a[aria-current]{color:var(--red-text)}
+  .cta{background:var(--ink);color:var(--paper);padding:9px 16px;text-decoration:none;
+    font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;white-space:nowrap}
+
+  /* Formularzeile: Label über Wert, von Linien getragen */
+  .fields{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--rule)}
+  .fields>div{padding:11px 14px 13px;border-right:1px solid var(--rule)}
+  .fields>div:last-child{border-right:0}
+
+  /* Hero */
+  .hero{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;padding:54px 0 42px;align-items:center}
+  h1{font-family:var(--disp);font-weight:900;font-size:clamp(2.6rem,6.4vw,5.4rem);line-height:.94;
+    letter-spacing:-.035em;margin:0;text-transform:uppercase;hyphens:auto}
+  h1 em{font-style:normal;color:var(--red)}
+  .lede{margin:22px 0 0;max-width:46ch;font-size:13.5px;line-height:1.75;color:var(--ink-2)}
+  .markbox{position:relative;display:grid;place-items:center;padding:14px}
+  .markbox img{width:100%;max-width:300px;height:auto}
+  .stamp{position:absolute;left:-4px;bottom:-6px;border:2.5px solid var(--red);color:var(--red);
+    padding:8px 13px;transform:rotate(-11deg);font-size:10px;letter-spacing:.18em;font-weight:600;
+    text-align:center;line-height:1.35;opacity:.92}
+
+  /* Positionsliste wie eine Ladeliste */
+  .pos{display:grid;grid-template-columns:62px 1fr 1fr 150px;gap:0;align-items:baseline;
+    padding:17px 14px;border-top:1px solid var(--rule);transition:background .18s}
+  .pos:hover{background:var(--paper-2)}
+  .pos .n{color:var(--red-text);font-weight:600}
+  .pos .t{font-family:var(--disp);font-weight:700;font-size:17px;letter-spacing:-.01em}
+  .pos .d{color:var(--ink-2);padding-right:18px}
+  .pos .s{text-align:right;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--faint)}
+
+  /* Kennzahlen */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--ink);
+    border-bottom:1px solid var(--rule)}
+  .kpis>div{padding:22px 14px;border-right:1px solid var(--rule)}
+  .kpis>div:last-child{border-right:0}
+  .kpis .num{font-family:var(--disp);font-weight:900;font-size:40px;line-height:1;letter-spacing:-.03em;
+    font-variant-numeric:tabular-nums}
+
+  .foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    padding:18px 0 40px;color:var(--faint);font-size:10px;letter-spacing:.15em;text-transform:uppercase}
+
+  @media(max-width:860px){
+    header{grid-template-columns:1fr auto;gap:14px}
+    nav{display:none}
+    .hero{grid-template-columns:1fr;padding:34px 0}
+    .fields{grid-template-columns:repeat(2,1fr)}
+    .fields>div:nth-child(2n){border-right:0}
+    .pos{grid-template-columns:40px 1fr;row-gap:6px}
+    .pos .d{grid-column:2;padding-right:0}
+    .pos .s{grid-column:2;text-align:left}
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .kpis>div:nth-child(2n){border-right:0}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <span class="brand">
+      <img src="/entwuerfe/mark-brand.svg" alt="" />
+      <b>KURT</b>
+    </span>
+    <nav>
+      <a href="#" aria-current="page">Start</a>
+      <a href="#">Leistungen</a>
+      <a href="#">Fuhrpark</a>
+      <a href="#">Kontakt</a>
+    </nav>
+    <a class="cta" href="#">Anfrage stellen</a>
+  </header>
+
+  <div class="fields">
+    <div><div class="lbl">Absender</div><div class="val">89081 Ulm · DE</div></div>
+    <div><div class="lbl">Empfänger</div><div class="val">West- &amp; Zentraleuropa</div></div>
+    <div><div class="lbl">Zertifiziert</div><div class="val">ISO 9001 · 27001 · IFS</div></div>
+    <div><div class="lbl">Erreichbar</div><div class="val">Mo–Fr 07:00–17:00</div></div>
+  </div>
+
+  <section class="hero">
+    <div>
+      <div class="lbl" style="margin-bottom:18px">Pos. 01 — Ganzheitliche Logistiklösungen</div>
+      <h1>Fracht, die<br /><em>nirgendwo</em><br />reinpasst</h1>
+      <p class="lede">
+        Hängende Bekleidung bei 2,75 m Innenhöhe. Temperaturgeführte Ladung mit
+        Echtzeitprotokollierung. Filialbelieferung ohne Rampe. Seit über 30 Jahren
+        von Ulm bis in die Türkei und nach Griechenland.
+      </p>
+    </div>
+    <div class="markbox">
+      <img src="/entwuerfe/mark-brand.svg" alt="KURT" />
+      <span class="stamp">DIN EN ISO<br />9001:2015</span>
+    </div>
+  </section>
+
+  <div class="rule-hvy"></div>
+  <div class="lbl" style="padding:14px">Ladungsarten — Positionsübersicht</div>
+
+  <div class="pos">
+    <span class="n">01</span>
+    <span class="t">Bekleidung hängend</span>
+    <span class="d">3-fach Hängung kurzer Oberteile, 2-fach bei langer Ware.</span>
+    <span class="s">2,75 m · XL-CODE</span>
+  </div>
+  <div class="pos">
+    <span class="n">02</span>
+    <span class="t">Temperaturgeführt</span>
+    <span class="d">Frischdienst und TK, Alarm bei Temperaturabweichung.</span>
+    <span class="s">Echtzeitprotokoll</span>
+  </div>
+  <div class="pos">
+    <span class="n">03</span>
+    <span class="t">Filialbelieferung</span>
+    <span class="d">Ebenerdige Zustellung über die Hebebühne am Fahrzeug.</span>
+    <span class="s">Ohne Rampenlager</span>
+  </div>
+  <div class="pos">
+    <span class="n">04</span>
+    <span class="t">Schwer- &amp; Sondertransport</span>
+    <span class="d">Spezialausrüstung für ungewöhnliche Maße und Gewichte.</span>
+    <span class="s">Nach Absprache</span>
+  </div>
+  <div class="pos">
+    <span class="n">05</span>
+    <span class="t">Projektladung</span>
+    <span class="d">Straße, Schiene oder Übersee — eine Ansprechperson.</span>
+    <span class="s">Multimodal</span>
+  </div>
+
+  <div style="height:46px"></div>
+
+  <div class="kpis">
+    <div><div class="num">30+</div><div class="lbl" style="margin-top:8px">Jahre Erfahrung</div></div>
+    <div><div class="num">28</div><div class="lbl" style="margin-top:8px">Länder im Netz</div></div>
+    <div><div class="num">6</div><div class="lbl" style="margin-top:8px">Fahrzeugtypen</div></div>
+    <div><div class="num">3</div><div class="lbl" style="margin-top:8px">Zertifizierungen</div></div>
+  </div>
+
+  <div class="foot">
+    <span>KURT Internationale Transporte GmbH · Hörvelsingerweg 52/2 · 89081 Ulm</span>
+    <span>Ref. 2026-10 · Entwurf A</span>
+  </div>
+
+</div>
+</body>
+</html>

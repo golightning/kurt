@@ -28,11 +28,11 @@ function Hero() {
         style={{ background: 'radial-gradient(circle, #e20613 0%, transparent 65%)' }}
       />
 
-      <div className="shell relative grid min-h-[calc(100svh-5rem)] items-center gap-10 lg:grid-cols-[1.05fr_1fr] [&>*]:min-w-0">
+      <div className="shell relative grid min-h-[calc(100svh-5rem)] items-center gap-10 lg:grid-cols-[1.6fr_1fr] [&>*]:min-w-0">
         <Reveal className="relative z-10 py-16">
           <p className="eyebrow reveal">Spedition in Ulm · seit über 30 Jahren</p>
 
-          <h1 className="reveal mt-6 text-[clamp(2.1rem,7vw,5.25rem)] leading-[1.0] md:leading-[0.95]">
+          <h1 className="reveal mt-6 text-[clamp(2.1rem,6.2vw,5rem)] leading-[1.0] md:leading-[0.95]">
             Ganzheitliche
             <br />
             <span className="text-red">Logistik</span>lösungen

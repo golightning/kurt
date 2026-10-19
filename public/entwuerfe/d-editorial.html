@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Entwurf D — Editorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#ffffff; --paper-2:#f4f4f2; --ink:#0d0d0d; --ink-2:#444448; --faint:#6e6e74;
+    --rule:#dcdcd8; --red:#e20613; --red-text:#c00510; --slate:#708296;
+    --disp:'Archivo',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased}
+  .shell{max-width:1320px;margin:0 auto;padding:0 32px}
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--red-text)}
+
+  header{border-bottom:1px solid var(--ink)}
+  .hdr{display:flex;align-items:center;justify-content:space-between;gap:24px;height:84px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand img{height:34px}
+  .brand b{font-family:var(--disp);font-weight:900;letter-spacing:.16em;font-size:15px}
+  nav{display:flex;gap:30px}
+  nav a{color:var(--ink-2);text-decoration:none;font-size:14px;font-weight:500}
+  nav a[aria-current]{color:var(--ink);text-decoration:underline;text-underline-offset:6px}
+  .cta{background:var(--ink);color:#fff;text-decoration:none;padding:12px 22px;font-size:13px;font-weight:600}
+
+  /* Aufmacher: Typografie traegt, Bild dient */
+  .lead{padding:66px 0 0}
+  h1{font-family:var(--disp);font-weight:900;font-size:clamp(2.6rem,9.2vw,8.6rem);
+    line-height:.86;letter-spacing:-.05em;margin:22px 0 0;hyphens:auto}
+  h1 .red{color:var(--red)}
+  .sub{display:grid;grid-template-columns:1fr 1fr;gap:40px;border-top:1px solid var(--ink);
+    margin-top:44px;padding-top:22px}
+  .sub p{margin:0;font-size:17px;line-height:1.62;color:var(--ink-2);max-width:48ch}
+  .sub .meta{display:flex;flex-direction:column;gap:12px}
+  .metarow{display:flex;justify-content:space-between;border-bottom:1px solid var(--rule);
+    padding-bottom:9px;font-size:13px}
+  .metarow b{font-weight:600}
+  .metarow span{color:var(--faint);font-variant-numeric:tabular-nums}
+
+  .hero-img{margin:46px 0 0;position:relative}
+  .hero-img img{width:100%;height:clamp(300px,46vw,560px);object-fit:cover;display:block;filter:grayscale(1) contrast(1.06)}
+  .hero-img .mark{position:absolute;right:28px;bottom:-34px;width:clamp(110px,14vw,190px);
+    background:var(--paper);padding:16px 18px}
+  .hero-img .mark img{height:auto;width:100%;filter:none}
+
+  /* Grosse Nummern als Struktur */
+  .numbers{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:92px 0 0;
+    border-top:2px solid var(--ink)}
+  .numbers>div{padding:26px 22px 30px;border-right:1px solid var(--rule)}
+  .numbers>div:last-child{border-right:0}
+  .numbers .n{font-family:var(--disp);font-weight:900;font-size:clamp(2.6rem,5.4vw,4.6rem);
+    line-height:.9;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+  .numbers .l{margin-top:12px;font-size:13px;color:var(--ink-2)}
+
+  /* Leistungen als redaktionelle Liste */
+  .svc{margin-top:92px}
+  .svc-h{display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+    border-bottom:2px solid var(--ink);padding-bottom:14px}
+  .svc-h h2{font-family:var(--disp);font-weight:900;font-size:clamp(1.6rem,3.4vw,2.6rem);
+    letter-spacing:-.035em;margin:0}
+  .row{display:grid;grid-template-columns:72px 1.1fr 1.4fr;gap:26px;align-items:start;
+    padding:28px 0;border-bottom:1px solid var(--rule)}
+  .row .n{font-family:var(--disp);font-weight:900;font-size:15px;color:var(--red-text);
+    font-variant-numeric:tabular-nums}
+  .row h3{font-family:var(--disp);font-weight:700;font-size:clamp(1.15rem,2vw,1.6rem);
+    letter-spacing:-.02em;margin:0}
+  .row p{margin:0;color:var(--ink-2);font-size:15px;line-height:1.6}
+  .row .tag{display:inline-block;margin-top:12px;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--faint);border:1px solid var(--rule);padding:4px 9px}
+
+  footer{margin-top:84px;border-top:1px solid var(--ink);padding:26px 0 62px;
+    display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--faint)}
+
+  @media(max-width:900px){
+    nav{display:none}
+    .sub{grid-template-columns:1fr;gap:26px}
+    .numbers{grid-template-columns:repeat(2,1fr)}
+    .numbers>div:nth-child(2n){border-right:0}
+    .row{grid-template-columns:48px 1fr;row-gap:10px}
+    .row p{grid-column:2}
+    .hero-img .mark{right:14px;bottom:-26px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="shell hdr">
+    <span class="brand"><img src="/entwuerfe/mark-brand.svg" alt="" /><b>KURT</b></span>
+    <nav><a href="#" aria-current="page">Start</a><a href="#">Leistungen</a>
+      <a href="#">Fuhrpark</a><a href="#">Kontakt</a></nav>
+    <a class="cta" href="#">Angebot anfordern</a>
+  </div>
+</header>
+
+<div class="shell">
+  <section class="lead">
+    <p class="eyebrow">Spedition in Ulm · seit über 30 Jahren</p>
+    <h1>Ganzheitliche<br /><span class="red">Logistik</span></h1>
+
+    <div class="sub">
+      <p>
+        Nationale und internationale Transporte von Ulm bis in die Türkei und nach
+        Griechenland. Hängende Bekleidung, temperaturgeführte Ladung, Filialbelieferung
+        ohne Rampe — mit einer festen Ansprechperson, die Ihren Auftrag kennt.
+      </p>
+      <div class="meta">
+        <div class="metarow"><b>Standort</b><span>Hörvelsingerweg 52/2, 89081 Ulm</span></div>
+        <div class="metarow"><b>Erreichbar</b><span>Mo–Fr 07:00–17:00</span></div>
+        <div class="metarow"><b>Zertifiziert</b><span>ISO 9001 · ISO 27001 · IFS</span></div>
+        <div class="metarow"><b>Telefon</b><span>+49 731 401 700</span></div>
+      </div>
+    </div>
+  </section>
+
+  <figure class="hero-img">
+    <img src="/img/kurttransport-1-1-1024.webp" alt="Fahrzeuge der KURT-Flotte" />
+    <span class="mark"><img src="/entwuerfe/mark-brand.svg" alt="KURT" /></span>
+  </figure>
+
+  <div class="numbers">
+    <div><div class="n">30+</div><div class="l">Jahre Erfahrung</div></div>
+    <div><div class="n">28</div><div class="l">Länder im Netz</div></div>
+    <div><div class="n">6</div><div class="l">Fahrzeugtypen</div></div>
+    <div><div class="n">3</div><div class="l">Zertifizierungen</div></div>
+  </div>
+
+  <section class="svc">
+    <div class="svc-h">
+      <h2>Fracht, die nicht auf eine Standardpalette passt</h2>
+      <span class="eyebrow">05 Lösungen</span>
+    </div>
+
+    <div class="row"><span class="n">01</span>
+      <div><h3>Bekleidung hängend</h3><span class="tag">2,75 m · XL-Code</span></div>
+      <p>Fertigbekleidung im Textilfahrzeug. Bei 2,75 m Innenhöhe ist eine 3-fach Hängung
+         kurzer Oberteile möglich, bei langer Ware eine 2-fach Hängung.</p></div>
+
+    <div class="row"><span class="n">02</span>
+      <div><h3>Temperaturgeführt</h3><span class="tag">Echtzeitprotokoll</span></div>
+      <p>Frischdienst und TK in definierten Temperaturbereichen, mit lückenloser
+         Protokollierung und Alarmmeldung bei Abweichung.</p></div>
+
+    <div class="row"><span class="n">03</span>
+      <div><h3>Filialbelieferung</h3><span class="tag">Ohne Rampenlager</span></div>
+      <p>Direkte Zustellung an Filialen, ebenerdig über die Hebebühne am Fahrzeug —
+         auch dort, wo keine Rampe vorhanden ist.</p></div>
+
+    <div class="row"><span class="n">04</span>
+      <div><h3>Schwer- &amp; Sondertransport</h3><span class="tag">Nach Absprache</span></div>
+      <p>Besonders große Fracht oder ungewöhnliche Maße, mit Spezialausrüstung und einem
+         auf die Ladung zugeschnittenen Transportkonzept.</p></div>
+
+    <div class="row"><span class="n">05</span>
+      <div><h3>Projektladung</h3><span class="tag">Multimodal</span></div>
+      <p>Straße, Schiene oder Übersee. Komplizierte Vorgänge sind für uns Alltag —
+         Ihre Fracht trifft wie vereinbart am Bestimmungsort ein.</p></div>
+  </section>
+
+  <footer>
+    <span>KURT Internationale Transporte GmbH · Hörvelsingerweg 52/2 · 89081 Ulm</span>
+    <span>Entwurf D — Editorial</span>
+  </footer>
+</div>
+
+</body>
+</html>

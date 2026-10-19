@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KURT — Design-Entwürfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{--ink:#0a0a0c;--surface:#141419;--line:#2a2a34;--fg:#f4f4f6;--muted:#a3a3ae;
+    --faint:#7c7c88;--red:#e20613;--red-text:#ff4a3d}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--fg);
+    font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .shell{max-width:1500px;margin:0 auto;padding:0 28px}
+  h1{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:-.035em;
+    font-size:clamp(1.9rem,4vw,3rem);margin:0}
+  .intro{padding:56px 0 34px;border-bottom:1px solid var(--line)}
+  .intro p{color:var(--muted);max-width:66ch;line-height:1.65;margin:16px 0 0}
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--red-text)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:26px;padding:34px 0 70px}
+  .card{border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;
+    overflow:hidden;transition:border-color .22s,transform .22s}
+  .card:hover{border-color:var(--red);transform:translateY(-3px)}
+  .frame{height:430px;overflow:hidden;background:#000;position:relative;border-bottom:1px solid var(--line)}
+  .frame iframe{width:1440px;height:1290px;border:0;transform:scale(.3);transform-origin:top left;
+    pointer-events:none}
+  .body{padding:20px 22px 24px}
+  .body h2{font-family:'Archivo',sans-serif;font-weight:800;font-size:19px;margin:8px 0 0;
+    letter-spacing:-.02em}
+  .body p{color:var(--muted);font-size:14px;line-height:1.6;margin:10px 0 0}
+  .body .risk{color:var(--faint);font-size:12.5px;line-height:1.55;margin:12px 0 0;
+    border-left:2px solid var(--line);padding-left:12px}
+  .open{display:inline-block;margin-top:18px;background:var(--red);color:#fff;text-decoration:none;
+    padding:10px 18px;font-size:13px;font-weight:600;border-radius:2px}
+  .tag{display:inline-block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--faint);border:1px solid var(--line);padding:4px 9px;margin-right:6px;margin-top:12px}
+  @media(max-width:700px){.frame{height:300px}.frame iframe{transform:scale(.22)}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="intro">
+    <p class="eyebrow">KURT Internationale Transporte · Startseite</p>
+    <h1>Fünf Entwürfe zur Auswahl</h1>
+    <p>
+      Gleicher Inhalt, gleiche Marke, fünf unterschiedliche Haltungen. Die Vorschau ist
+      verkleinert — zum Beurteilen bitte jeweils „Vollbild öffnen" benutzen. E0 ist der
+      aktuelle, bereits gebaute Stand; er bleibt unverändert bestehen.
+    </p>
+  </div>
+
+  <div class="grid">
+
+    <article class="card">
+      <div class="frame"><iframe src="/" title="Entwurf E0" loading="lazy"></iframe></div>
+      <div class="body">
+        <span class="eyebrow">E0 · Bestand</span>
+        <h2>Dunkel &amp; reduziert</h2>
+        <p>Der gebaute Stand mit dem 3D-Z im Hero. Sicher, modern, professionell —
+           aber in der Grundhaltung austauschbar.</p>
+        <p class="risk">Risiko: wirkt wie viele aktuelle Agentur-Seiten.</p>
+        <span class="tag">React</span><span class="tag">3D</span><span class="tag">fertig</span>
+        <a class="open" href="/" target="_blank" rel="noopener">Vollbild öffnen</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="frame"><iframe src="/entwuerfe/a-frachtbrief.html" title="Entwurf A" loading="lazy"></iframe></div>
+      <div class="body">
+        <span class="eyebrow">A</span>
+        <h2>Frachtbrief</h2>
+        <p>Die Typografie echter Speditionsdokumente als Designsystem: Papier statt Dunkel,
+           Monospace-Daten, gezogene Linien, Positionsnummern, ein roter Zertifikatsstempel.</p>
+        <p class="risk">Stärke: Niemand sonst in der Branche sieht so aus. Risiko: wirkt
+           nüchtern, lebt von Satz und Detail statt von Bildern.</p>
+        <span class="tag">Papier</span><span class="tag">Monospace</span><span class="tag">dokumentarisch</span>
+        <a class="open" href="/entwuerfe/a-frachtbrief.html" target="_blank" rel="noopener">Vollbild öffnen</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="frame"><iframe src="/entwuerfe/b-diagonale.html" title="Entwurf B" loading="lazy"></iframe></div>
+      <div class="body">
+        <span class="eyebrow">B</span>
+        <h2>Die Diagonale</h2>
+        <p>Der 45°-Strich der Z-Marke wird zur Bauordnung: Sektionen schneiden diagonal,
+           das Bild ist auf denselben Winkel maskiert, eine rote Linie läuft als Route
+           durch die ganze Seite.</p>
+        <p class="risk">Stärke: leitet sich direkt aus seinem Logo ab. Risiko: Diagonalen
+           kosten Platz und können unruhig wirken.</p>
+        <span class="tag">dunkel</span><span class="tag">geometrisch</span><span class="tag">3D möglich</span>
+        <a class="open" href="/entwuerfe/b-diagonale.html" target="_blank" rel="noopener">Vollbild öffnen</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="frame"><iframe src="/entwuerfe/c-massstab.html" title="Entwurf C" loading="lazy"></iframe></div>
+      <div class="body">
+        <span class="eyebrow">C</span>
+        <h2>Maßstab</h2>
+        <p>Technische Zeichnung statt Stockfoto. Der Auflieger als Riss mit echten Maßlinien:
+           13,60 m, 2,75 m Innenhöhe, 12 Hängestangen. Blaupausen-Raster im Hintergrund.</p>
+        <p class="risk">Stärke: verkauft Kompetenz, statt sie zu behaupten. Risiko: kühl,
+           und jede Zeichnung muss gepflegt werden.</p>
+        <span class="tag">Blaupause</span><span class="tag">Maßlinien</span><span class="tag">SVG</span>
+        <a class="open" href="/entwuerfe/c-massstab.html" target="_blank" rel="noopener">Vollbild öffnen</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="frame"><iframe src="/entwuerfe/d-editorial.html" title="Entwurf D" loading="lazy"></iframe></div>
+      <div class="body">
+        <span class="eyebrow">D</span>
+        <h2>Editorial</h2>
+        <p>Hell, strenges Raster, Typografie trägt alles. Riesige Headline, Bild in
+           Graustufen, große Zahlen als Struktur, Leistungen als redaktionelle Liste.</p>
+        <p class="risk">Stärke: wirkt hochwertig und erwachsen. Risiko: am nächsten an
+           klassischem Corporate — weniger Überraschung.</p>
+        <span class="tag">hell</span><span class="tag">Raster</span><span class="tag">Magazin</span>
+        <a class="open" href="/entwuerfe/d-editorial.html" target="_blank" rel="noopener">Vollbild öffnen</a>
+      </div>
+    </article>
+
+  </div>
+</div>
+</body>
+</html>
