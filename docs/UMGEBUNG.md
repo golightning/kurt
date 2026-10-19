@@ -1,25 +1,59 @@
-# Umgebungs-Befund
+# Umgebungs-Befund (behoben)
 
-## Kaputter Node-Shim (blockiert node, npm und npx systemweit)
+## Kaputter Node-Shim — blockierte node, npm und npx systemweit
 
-`/Users/tolgahisir/.local/bin/node` ist eine **0 Byte grosse, leere Datei**.
-Da `~/.local/bin` in der `PATH` vor Homebrew steht, wird sie statt des echten
-Node gefunden. Jedes npm-/npx-CLI startet per `#!/usr/bin/env node` und
-scheitert dadurch **lautlos** — kein stdout, kein Fehlertext.
+**Status: am 2026-10-19 behoben.** Dokumentiert, weil der Fehler schwer zu finden war und
+sich jederzeit wiederholen kann, falls ein Tool die Datei erneut anlegt.
 
-Echter Node: `/opt/homebrew/opt/node@22/bin/node` (v22.23.3, npm 10.9.9).
+### Was los war
 
-### Dauerhafte Loesung (im Terminal ausfuehren)
+`/Users/tolgahisir/.local/bin/node` war eine **0 Byte grosse, leere, ausführbare Datei**,
+datiert auf den 4. Februar 2026.
+
+In `~/.zshrc` steht in der letzten PATH-Zeile:
 
 ```sh
-rm /Users/tolgahisir/.local/bin/node
-node -v   # muss v22.23.3 zeigen
+export PATH="$HOME/.local/bin:$PATH"
 ```
 
-### Workaround in diesem Projekt
+Sie läuft nach der Node-Zeile und schiebt `~/.local/bin` damit ganz nach vorn — vor den
+Homebrew-Node. Jedes npm-CLI startet per `#!/usr/bin/env node`, fand diese leere Datei,
+führte sie aus, und sie tat nichts.
 
-Alle npm-Aufrufe laufen mit vorangestelltem PATH:
+### Warum es so lange unentdeckt blieb
+
+Der Fehlermodus war **kein** Fehler:
+
+```
+node -v  ->  (keine Ausgabe)   exit=0
+npm -v   ->  (keine Ausgabe)   exit=0
+```
+
+Exit-Code 0 und leere Ausgabe. Skripte „liefen durch", ohne irgendetwas zu tun. Betroffen
+war nicht nur dieses Projekt, sondern jedes Node-Projekt auf dem Rechner — nachgestellt und
+bestätigt in `golightning-website`.
+
+### Behebung
 
 ```sh
-export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
+rm ~/.local/bin/node
+```
+
+Danach löst `node` wieder korrekt auf, ohne dass irgendwo ein PATH-Export nötig wäre:
+
+```
+node -> /opt/homebrew/opt/node@22/bin/node
+node -v: v22.23.3
+npm  -v: 10.9.9
+```
+
+Die beiden `graphify`-Symlinks in `~/.local/bin` sind davon unberührt und weiterhin intakt.
+
+### Erkennungsmerkmal für die Zukunft
+
+Wenn `node -v` nichts ausgibt und trotzdem mit 0 endet, zuerst prüfen:
+
+```sh
+command -v node        # sollte /opt/homebrew/... zeigen, nicht ~/.local/bin
+ls -la ~/.local/bin/node
 ```

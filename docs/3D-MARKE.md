@@ -81,7 +81,6 @@ Metalness ein erklärter Autolack-Look — flache Grafik trägt keine Schattieru
 ## Modell selbst ansehen
 
 ```sh
-export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 npm run dev
 # dann: http://localhost:5173/preview.html?az=0&rig=custom&tm=neutral&exp=0.45
 ```

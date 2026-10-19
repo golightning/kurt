@@ -12,9 +12,6 @@ den Inhalten der bestehenden WordPress-Seite (Analyse: [`docs/ANALYSE.md`](docs/
 ## Schnellstart
 
 ```sh
-# Einmalig: der echte Node liegt hinter einer kaputten PATH-Datei, siehe docs/UMGEBUNG.md
-export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
-
 npm install
 npm run dev        # Entwicklungsserver
 npm run build      # Produktions-Build inkl. Prerendering, Sitemap und robots.txt
