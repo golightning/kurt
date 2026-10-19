@@ -51,6 +51,11 @@
     font-weight: 800;
     letter-spacing: -0.03em;
     text-wrap: balance;
+    /* Deutsche Komposita wie "Logistikloesungen" oder "Projektladungsnetzwerk"
+       sind ein einziges Wort. Ohne Trennung erzwingen sie ihre volle Breite als
+       Mindestbreite und sprengen auf schmalen Viewports das Layout. */
+    hyphens: auto;
+    overflow-wrap: break-word;
   }
 
   p { text-wrap: pretty; }

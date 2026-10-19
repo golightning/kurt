@@ -18,7 +18,7 @@ export function Leistungen() {
           id={s.slug}
           className={i % 2 === 1 ? 'border-y border-line bg-ink-2' : ''}
         >
-          <Reveal className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-20">
+          <Reveal className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-20 [&>*]:min-w-0">
             <div className={i % 2 === 1 ? 'lg:order-2' : ''}>
               <span className="eyebrow reveal nums">{String(i + 1).padStart(2, '0')}</span>
               <h2 className="reveal mt-4 text-3xl leading-tight md:text-4xl">{s.title}</h2>
