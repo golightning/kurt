@@ -2,6 +2,9 @@ import { Link } from 'react-router-dom'
 import { ZMarkStage } from '@/components/ZMarkStage'
 import { ZMark } from '@/components/ZMark'
 import { RouteLine } from '@/components/RouteLine'
+import { TrailerScale } from '@/components/TrailerScale'
+import { StackReveal } from '@/components/StackReveal'
+import { ScrollCounter, ScrollProgressAnchor } from '@/components/ScrollCounter'
 import { Picture, Reveal, Section } from '@/components/ui'
 import { certifications, reach, services, sustainability, values } from '@/data/site'
 
@@ -11,6 +14,7 @@ export function Home() {
       <Hero />
       <Leistungen />
       <Relation />
+      <Masse />
       <Arbeitsweise />
       <Ressourcen />
       <Zertifikate />
@@ -157,62 +161,125 @@ function Relation() {
   )
 }
 
-/* ---------- Bewusst leise: die Taeler zwischen den Gipfeln ---------- */
+/** Gipfel 3 — der Auflieger im Riss, beim Scrollen bemasst. Beantwortet die
+ *  Frage, die jeder Interessent zuerst stellt (passt meine Ladung rein?), mit
+ *  einer Zeichnung statt mit einem Stockfoto. Die Masse stammen aus dem Fuhrpark. */
+function Masse() {
+  return (
+    <section className="relative overflow-hidden border-t border-line py-28 md:py-36">
+      <div className="shell relative">
+        <div className="grid gap-x-16 gap-y-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-end">
+          <h2 className="max-w-[20ch] text-[clamp(2rem,5vw,3.6rem)] leading-[1.02]">
+            Platz, der sich nachrechnen lässt
+          </h2>
+          <p className="max-w-[52ch] text-base leading-relaxed text-muted">
+            Der Textil-Koffersattel nach XL-CODE: volle Ladelänge, 2,75 m lichte Höhe. Genug für
+            eine 3-fach Hängung kurzer Oberteile oder eine 2-fach Hängung langer Bekleidung.
+          </p>
+        </div>
 
-function QuietSection({ label, children }: { label: string; children: React.ReactNode }) {
+        {/* Ein Anker fuer Zeichnung UND Kennzahlen: beide haengen am Fortschritt des
+            Abschnitts, nicht an ihrer je eigenen Position — sonst zaehlen die Zahlen
+            erst los, wenn die Bemassung oben schon fertig ist. */}
+        <ScrollProgressAnchor className="mt-12 md:mt-16" start={0.8} end={0.5}>
+          <TrailerScale />
+
+          <dl className="mt-10 grid gap-x-12 gap-y-8 border-t border-line pt-10 sm:grid-cols-3">
+          <div>
+            <dt className="text-sm text-muted">Ladelänge</dt>
+            <dd className="mt-1 text-[clamp(1.6rem,3.2vw,2.4rem)] leading-none text-fg">
+              <ScrollCounter to={13.6} decimals={2} suffix=" m" />
+            </dd>
+          </div>
+          <div>
+            <dt className="text-sm text-muted">Lichte Innenhöhe</dt>
+            <dd className="mt-1 text-[clamp(1.6rem,3.2vw,2.4rem)] leading-none text-fg">
+              <ScrollCounter to={2.75} decimals={2} suffix=" m" />
+            </dd>
+          </div>
+          <div>
+            <dt className="text-sm text-muted">Fahrzeugtypen im Haus</dt>
+            <dd className="mt-1 text-[clamp(1.6rem,3.2vw,2.4rem)] leading-none text-fg">
+              <ScrollCounter to={6} />
+            </dd>
+          </div>
+          </dl>
+        </ScrollProgressAnchor>
+      </div>
+    </section>
+  )
+}
+
+/** Vier Zusagen, die sich beim Scrollen aufbauen. Vorher eine zweispaltige
+ *  Definitionsliste ohne jede Bewegung — vom Nutzer als langweilig markiert. */
+function Arbeitsweise() {
   return (
     <Section className="border-t border-line">
-      <div className="grid gap-x-16 gap-y-10 md:grid-cols-[minmax(0,14rem)_1fr]">
-        <h2 className="text-xl leading-snug text-muted">{label}</h2>
-        {children}
-      </div>
+      <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.75rem)] leading-[1.05]">
+        Worauf Sie sich verlassen können
+      </h2>
+      <StackReveal className="mt-14 border-t border-line">
+        {values.map((v) => (
+          <div
+            key={v.title}
+            className="grid gap-x-12 gap-y-2 border-b border-line py-7 md:grid-cols-[minmax(0,18rem)_1fr] md:py-8"
+          >
+            {/* [hyphens:none]: die globale Silbentrennung fuer deutsche Komposita
+                trennte hier "Transparen-te Kalkulation", obwohl die Spalte breit
+                genug ist. In dieser Spalte wird nur am Leerzeichen umbrochen. */}
+            <h3 className="text-[clamp(1.1rem,2vw,1.5rem)] leading-snug [hyphens:none]">{v.title}</h3>
+            <p className="max-w-[58ch] text-sm leading-relaxed text-muted">{v.body}</p>
+          </div>
+        ))}
+      </StackReveal>
     </Section>
   )
 }
 
-function Arbeitsweise() {
-  return (
-    <QuietSection label="Worauf Sie sich verlassen können">
-      <dl className="grid gap-x-12 gap-y-8 sm:grid-cols-2">
-        {values.map((v) => (
-          <div key={v.title}>
-            <dt className="text-base text-fg">{v.title}</dt>
-            <dd className="mt-2 max-w-[62ch] text-sm leading-relaxed text-muted">{v.body}</dd>
-          </div>
-        ))}
-      </dl>
-    </QuietSection>
-  )
-}
-
+/** Sechs Hebel, nummeriert und am Scroll aufgebaut. Bleibt ruhiger als die
+ *  Gipfel: kleine Schrift, kein Rot, nur der Aufbau als Bewegung. */
 function Ressourcen() {
   return (
-    <QuietSection label="Ressourcenschonende Logistik">
-      <ul className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
+    <Section className="border-t border-line">
+      <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.75rem)] leading-[1.05]">
+        Ressourcenschonende Logistik
+      </h2>
+      <StackReveal className="mt-14 grid gap-x-16 gap-y-0 sm:grid-cols-2">
         {sustainability.map((s) => (
-          <li key={s.title} className="max-w-[62ch]">
-            <span className="text-base text-fg">{s.title}</span>
-            <span className="mt-1 block text-sm leading-relaxed text-muted">{s.body}</span>
-          </li>
+          <div key={s.title} className="border-t border-line py-6">
+            <h3 className="text-base leading-snug text-fg">{s.title}</h3>
+            <p className="mt-1.5 max-w-[56ch] text-sm leading-relaxed text-muted">{s.body}</p>
+          </div>
         ))}
-      </ul>
-    </QuietSection>
+      </StackReveal>
+    </Section>
   )
 }
 
+/** Die Zertifikate sind der einzige harte Beweis auf der Seite — sie standen
+ *  vorher als Kleinschrift in einer dreispaltigen Liste. Jetzt tragen die Codes
+ *  Displaygroesse. */
 function Zertifikate() {
   return (
-    <QuietSection label="Geprüft, nicht behauptet">
-      <dl className="grid gap-x-12 gap-y-7 sm:grid-cols-3">
+    <Section className="border-t border-line">
+      <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.75rem)] leading-[1.05]">
+        Geprüft, nicht behauptet
+      </h2>
+      <StackReveal className="mt-14 border-t border-line">
         {certifications.map((c) => (
-          <div key={c.code}>
-            <dt className="text-base text-fg">{c.code}</dt>
-            <dd className="mt-1 text-xs text-faint nums">{c.full}</dd>
-            <dd className="mt-2 text-sm leading-relaxed text-muted">{c.note}</dd>
+          <div
+            key={c.code}
+            className="grid items-baseline gap-x-10 gap-y-3 border-b border-line py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:py-10"
+          >
+            <h3 className="text-[clamp(1.6rem,4vw,3rem)] leading-none">{c.code}</h3>
+            <div>
+              <p className="text-sm leading-relaxed text-muted">{c.note}</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.16em] text-faint nums">{c.full}</p>
+            </div>
           </div>
         ))}
-      </dl>
-    </QuietSection>
+      </StackReveal>
+    </Section>
   )
 }
 
