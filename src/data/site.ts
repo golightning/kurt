@@ -44,6 +44,14 @@ export type Certification = {
   renewalOpen?: boolean
 }
 
+/** Gilt der Nachweis heute? Ein Scan allein genuegt nicht — das IFS-Dokument
+ *  liegt vor, seine Bestaetigung ist aber am 09.05.2025 ausgelaufen. Wer
+ *  "zertifiziert" schreibt, muss diese Pruefung verwenden. */
+export const isCurrentlyCertified = (c: Certification, today = new Date()) =>
+  c.status === 'belegt' &&
+  !c.renewalOpen &&
+  (c.validUntil === null || new Date(c.validUntil) >= today)
+
 export const certifications: Certification[] = [
   {
     id: 'iso9001-transporte',

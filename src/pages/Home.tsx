@@ -6,7 +6,15 @@ import { TrailerScale } from '@/components/TrailerScale'
 import { StackReveal } from '@/components/StackReveal'
 import { ScrollCounter, ScrollProgressAnchor } from '@/components/ScrollCounter'
 import { Picture, Reveal, Section } from '@/components/ui'
-import { certifications, partnership, reach, services, sustainability, values } from '@/data/site'
+import {
+  certifications,
+  isCurrentlyCertified,
+  partnership,
+  reach,
+  services,
+  sustainability,
+  values,
+} from '@/data/site'
 
 export function Home() {
   return (
@@ -293,7 +301,7 @@ function Zertifikate() {
                   Eintrag fehlt der Nachweis, beim IFS-Dokument ist die
                   Bestaetigung abgelaufen. Beides gehoert vor den Kundentermin
                   auf den Tisch, nicht hinter eine Behauptung. */}
-              {c.status === 'ungeklaert' || c.renewalOpen ? (
+              {!isCurrentlyCertified(c) ? (
                 <p className="mt-3 inline-block rounded-sm border border-line px-2 py-1 text-xs text-dim">
                   {c.status === 'ungeklaert'
                     ? 'Nachweis liegt uns nicht vor'

@@ -142,12 +142,35 @@ In der Demo tragen die Zertifikate jetzt ihre echten Daten aus den Scans:
 Geltungsbereich, Registriernummer, ausstellende Stelle und Laufzeit, dazu
 maschinenlesbar als hasCredential.
 
-**Offene Frage: ISO 27001.** Auf der Live-Seite nur in einer Neuigkeit von 2021
-erwaehnt, kein Zertifikatsscan vorhanden, in den aktuellen Audit-Meldungen
-(Mai 2025, "doppeltes ISO-9001-Audit") nicht genannt. In der Demo steht es
-deshalb ohne Geltungsbereich und Laufzeit. Beim Inhaber klaeren: noch gueltig?
-Wenn ja, fehlt der Nachweis auf der Seite. Wenn nein, gehoert die Angabe
-entfernt — eine abgelaufene Zertifizierung zu fuehren ist ein echtes Risiko.
+**Offene Nachweise: ISO 27001 und IFS.** Zwei Angaben sind nicht durch einen
+heute gueltigen Nachweis gedeckt:
+
+- **ISO 27001** — nur in einer Neuigkeit von 2021 erwaehnt, kein
+  Zertifikatsscan, in den aktuellen Audit-Meldungen (Mai 2025, "doppeltes
+  ISO-9001-Audit") nicht genannt.
+- **IFS Progress Logistics** — der Scan liegt vor, seine Bestaetigung lief am
+  **09.05.2025** aus. Das Assessment vom Maerz 2024 belegt keine heutige
+  Gueltigkeit.
+
+In der Demo erscheinen beide als historische Nachweise mit offenem Status
+("Nachweis liegt uns nicht vor" bzw. "Folgebestaetigung ausstehend"). Sie
+stehen nicht im Footer unter "Zertifiziert", nicht in der Meta-Description und
+nicht im strukturierten `hasCredential`. Nur die beiden ISO-9001-Zertifikate
+(gueltig bis 01.05.2028) werden als laufend gefuehrt.
+
+**Wortlaut fuer die Rueckfrage:**
+
+> Bitte senden Sie uns die aktuellen Nachweise fuer ISO 27001 und IFS Progress
+> Logistics. Uns liegen dafuer bisher nur die Erwaehnung von 2021 beziehungsweise
+> das Assessment von 2024 vor.
+
+Sobald die Nachweise vorliegen: `status` auf `belegt`, `renewalOpen` entfernen
+und `validUntil` setzen — Footer, Meta-Description und strukturierte Daten
+ziehen automatisch nach, weil alle `isCurrentlyCertified()` verwenden.
+
+Im Gespraech ist das keine Schwaeche, sondern der Beleg fuer die Arbeitsweise:
+auf der heutigen Seite steht der abgelaufene ISO-Scan von 2023 unkommentiert
+neben dem gueltigen, und niemandem faellt es auf, weil alles nur Bilder sind.
 
 **Veraltete Scans.** Das ISO-9001-Zertifikat von 2023 (gueltig bis 26.05.2024)
 liegt noch auf der Seite, obwohl das Nachfolgezertifikat bis 2028 laeuft. Zeigt,

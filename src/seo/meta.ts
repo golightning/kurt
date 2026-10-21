@@ -1,4 +1,4 @@
-import { company, partnership, certifications } from '@/data/site'
+import { company, partnership, certifications, isCurrentlyCertified } from '@/data/site'
 
 export const SITE_URL = 'https://kurt-transport.com'
 
@@ -83,8 +83,10 @@ export const organizationJsonLd = {
   // leerem alt-Attribut und ist damit maschinell unsichtbar.
   // Zertifikate maschinenlesbar. Live liegen sie nur als Bildergalerie mit
   // leeren alt-Attributen auf /unsere-zertifizierungen/.
+  // Nur heute gueltige Nachweise. Ein abgelaufenes validUntil wuerde
+  // Suchmaschinen eine laufende Zertifizierung melden, die nicht belegt ist.
   hasCredential: certifications
-    .filter((c) => c.registry)
+    .filter((c) => c.registry && isCurrentlyCertified(c))
     .map((c) => ({
       '@type': 'EducationalOccupationalCredential',
       credentialCategory: 'certification',

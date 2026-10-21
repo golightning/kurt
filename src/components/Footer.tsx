@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ZMark } from '@/components/ZMark'
-import { company, certifications, nav } from '@/data/site'
+import { company, certifications, isCurrentlyCertified, nav } from '@/data/site'
 
 export function Footer() {
   return (
@@ -56,20 +56,28 @@ export function Footer() {
           <h2 className="mt-8 text-xs font-semibold uppercase tracking-[0.2em] text-faint">
             Zertifiziert
           </h2>
-          {/* Nur was durch einen Zertifikatsscan belegt ist. ISO 27001 steht auf
-              der Startseite mit offenem Status und gehoert nicht in diese Liste. */}
+          {/* Nur Nachweise, die heute gelten. Das IFS-Dokument liegt vor, seine
+              Bestaetigung ist aber 2025 ausgelaufen — es stand hier faelschlich
+              unter "Zertifiziert". Offene Faelle nennt die Startseite mit
+              ihrem jeweiligen Status. */}
           <ul className="mt-4 flex flex-wrap gap-2">
-            {certifications
-              .filter((c) => c.status === 'belegt')
-              .map((c) => (
-                <li
-                  key={c.id}
-                  className="rounded-sm border border-line px-2.5 py-1 text-xs font-medium text-muted"
-                >
-                  {c.label}
-                </li>
-              ))}
+            {certifications.filter((c) => isCurrentlyCertified(c)).map((c) => (
+              <li
+                key={c.id}
+                className="rounded-sm border border-line px-2.5 py-1 text-xs font-medium text-muted"
+              >
+                {c.label}
+              </li>
+            ))}
           </ul>
+          {certifications.some((c) => !isCurrentlyCertified(c)) ? (
+            <p className="mt-3 text-xs leading-relaxed text-dim">
+              {`Weitere Nachweise mit offenem Folgestatus: ${certifications
+                .filter((c) => !isCurrentlyCertified(c))
+                .map((c) => c.label)
+                .join(', ')}. Stand siehe Startseite.`}
+            </p>
+          ) : null}
         </div>
       </div>
 
