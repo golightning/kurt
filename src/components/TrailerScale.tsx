@@ -34,10 +34,18 @@ export function TrailerScale() {
   const reduced = own.reduced
   const ref = shared === null ? own.ref : undefined
 
-  const pOutline = phase(progress, 0.0, 0.3)
-  const pHeight = phase(progress, 0.25, 0.5)
-  const pLength = phase(progress, 0.45, 0.7)
-  const pBars = phase(progress, 0.62, 1.0)
+  // Frueh und mit Ueberlappung: der Umriss stand vorher erst, wenn die Zeichnung
+  // schon ganz im Bild war — der Aufbau wirkte dadurch verspaetet. Jetzt ist der
+  // Umriss bei einem Drittel des Wegs fertig, und die Bemassung setzt ein,
+  // waehrend er noch laeuft.
+  // Staerker ueberlappend: mit vier getrennten Phasen begannen die Haengestangen
+  // erst, als die Zeichnung schon wieder aus dem Bild lief. Jetzt setzt jede
+  // Phase ein, waehrend die vorige noch laeuft — der Aufbau ist bei ~75 % des
+  // Wegs fertig, also solange die Zeichnung voll im Bild steht.
+  const pOutline = phase(progress, 0.0, 0.2)
+  const pHeight = phase(progress, 0.14, 0.34)
+  const pLength = phase(progress, 0.26, 0.46)
+  const pBars = phase(progress, 0.36, 0.7)
 
   const bars = 12
   const barsShown = reduced ? bars : Math.round(pBars * bars)

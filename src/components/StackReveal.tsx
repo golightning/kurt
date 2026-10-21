@@ -20,7 +20,9 @@ export function StackReveal({
   children: ReactNode[]
   className?: string
 }) {
-  const { ref, progress, reduced } = useScrollProgress<HTMLDivElement>({ start: 0.88, end: 0.4 })
+  // Frueh genug: mit 0.88/0.4 begann die erste Zeile erst aufzuhellen, wenn der
+  // Block schon zu 40 % im Bild stand — der Aufbau wirkte verspaetet.
+  const { ref, progress, reduced } = useScrollProgress<HTMLDivElement>({ start: 1.0, end: 0.55 })
   const n = children.length
 
   return (
@@ -29,7 +31,7 @@ export function StackReveal({
         // Fenster pro Zeile, mit Ueberlappung: die Liste baut sich fliessend auf,
         // nicht in harten Stufen.
         const at = n > 1 ? i / (n - 1) : 0
-        const local = Math.max(0, Math.min(1, (progress - at * 0.62) / 0.3))
+        const local = Math.max(0, Math.min(1, (progress - at * 0.55) / 0.26))
         const t = reduced ? 1 : local
         return (
           <div

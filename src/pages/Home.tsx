@@ -181,7 +181,7 @@ function Masse() {
         {/* Ein Anker fuer Zeichnung UND Kennzahlen: beide haengen am Fortschritt des
             Abschnitts, nicht an ihrer je eigenen Position — sonst zaehlen die Zahlen
             erst los, wenn die Bemassung oben schon fertig ist. */}
-        <ScrollProgressAnchor className="mt-12 md:mt-16" start={0.8} end={0.5}>
+        <ScrollProgressAnchor className="mt-12 md:mt-16" start={0.92} end={0.52}>
           <TrailerScale />
 
           <dl className="mt-10 grid gap-x-12 gap-y-8 border-t border-line pt-10 sm:grid-cols-3">
