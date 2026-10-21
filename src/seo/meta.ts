@@ -1,4 +1,4 @@
-import { company, partnership } from '@/data/site'
+import { company, partnership, certifications } from '@/data/site'
 
 export const SITE_URL = 'https://kurt-transport.com'
 
@@ -81,6 +81,18 @@ export const organizationJsonLd = {
   // Die Partnerschaft mit dem SSV Ulm belegt die regionale Verankerung — fuer
   // lokale Suchanfragen ein echtes Signal. Live existiert sie nur als Logo mit
   // leerem alt-Attribut und ist damit maschinell unsichtbar.
+  // Zertifikate maschinenlesbar. Live liegen sie nur als Bildergalerie mit
+  // leeren alt-Attributen auf /unsere-zertifizierungen/.
+  hasCredential: certifications
+    .filter((c) => c.registry)
+    .map((c) => ({
+      '@type': 'EducationalOccupationalCredential',
+      credentialCategory: 'certification',
+      name: c.full,
+      identifier: c.registry,
+      recognizedBy: { '@type': 'Organization', name: c.issuer },
+      ...(c.validUntil ? { validUntil: c.validUntil } : {}),
+    })),
   sponsor: {
     '@type': 'SportsTeam',
     name: partnership.name,
@@ -90,10 +102,5 @@ export const organizationJsonLd = {
     { '@type': 'Place', name: 'West- und Zentraleuropa' },
     { '@type': 'Country', name: 'Türkei' },
     { '@type': 'Country', name: 'Griechenland' },
-  ],
-  hasCredential: [
-    'DIN EN ISO 9001:2015',
-    'DIN ISO 27001:2013',
-    'IFS Progress Logistics 2024',
   ],
 }

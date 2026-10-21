@@ -122,17 +122,29 @@ Auffindbarkeit und ein Formular, das tatsächlich zu einer Anfrage führt.
 
 ## 6. Offene Fragen an den Inhaber
 
-**SSV Ulm / Partnerschaften.** Auf der heutigen Live-Seite steht kein Hinweis auf
-eine Partnerschaft mit dem SSV Ulm — weder im Impressum noch auf Start,
-Unternehmen, Neuigkeiten, Kontakt oder Zertifizierungen (am 21.10.2026 alle
-abgerufen und durchsucht; Gegenprobe mit einem Wort, das sicher vorkommt,
-bestätigt die Suche). Entweder stand es früher dort und wurde entfernt, oder es
-gibt die Verbindung ausserhalb der Website.
+**Alles liegt nur als Bild vor.** Dreizehn Bilder der Live-Seite haben ein leeres
+alt-Attribut, darunter die SSV-Partnerschaft im Footer und saemtliche
+Zertifikatsscans auf /unsere-zertifizierungen/. Fuer Google und fuer
+Screenreader existieren diese Belege schlicht nicht — die Zertifizierungsseite
+enthaelt null Woerter Text.
 
-Beides ist ein gutes Gespraechsthema statt eines Problems: regionale
-Sichtbarkeit ist fuer eine Spedition im Mittelstand ein echtes Argument bei
-Personalgewinnung und lokalen Auftraggebern. Falls die Partnerschaft besteht,
-gehoert sie auf die Startseite und nicht ins Impressum — als Beleg dafuer, dass
-das Unternehmen in Ulm verankert ist.
+Das ist das konkreteste Argument im ganzen Gespraech, weil es sich in zwei
+Zeilen zeigen laesst:
 
-Nicht erfinden: ohne Bestaetigung des Inhabers bleibt das aus der Demo heraus.
+    live: <img src="ssv-grafik-neu.png" alt="">
+    Demo: Ueberschrift + Fliesstext + alt-Attribut + JSON-LD sponsor/SportsTeam
+
+In der Demo tragen die Zertifikate jetzt ihre echten Daten aus den Scans:
+Geltungsbereich, Registriernummer, ausstellende Stelle und Laufzeit, dazu
+maschinenlesbar als hasCredential.
+
+**Offene Frage: ISO 27001.** Auf der Live-Seite nur in einer Neuigkeit von 2021
+erwaehnt, kein Zertifikatsscan vorhanden, in den aktuellen Audit-Meldungen
+(Mai 2025, "doppeltes ISO-9001-Audit") nicht genannt. In der Demo steht es
+deshalb ohne Geltungsbereich und Laufzeit. Beim Inhaber klaeren: noch gueltig?
+Wenn ja, fehlt der Nachweis auf der Seite. Wenn nein, gehoert die Angabe
+entfernt — eine abgelaufene Zertifizierung zu fuehren ist ein echtes Risiko.
+
+**Veraltete Scans.** Das ISO-9001-Zertifikat von 2023 (gueltig bis 26.05.2024)
+liegt noch auf der Seite, obwohl das Nachfolgezertifikat bis 2028 laeuft. Zeigt,
+dass die Seite nicht gepflegt wird.

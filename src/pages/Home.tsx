@@ -79,7 +79,7 @@ function Hero() {
           </div>
 
           <p className="mt-10 text-xs uppercase tracking-[0.2em] text-faint">
-            ISO 9001 · ISO 27001 · IFS Progress Logistics
+            ISO 9001 · IFS Progress Logistics · Businesspartner SSV Ulm 1846
           </p>
         </div>
 
@@ -259,23 +259,64 @@ function Ressourcen() {
 /** Die Zertifikate sind der einzige harte Beweis auf der Seite — sie standen
  *  vorher als Kleinschrift in einer dreispaltigen Liste. Jetzt tragen die Codes
  *  Displaygroesse. */
+/** Die Zertifikate tragen jetzt ihre echten Daten: Geltungsbereich, Registrier-
+ *  nummer, Laufzeit — alles aus den Scans auf /unsere-zertifizierungen/, wo sie
+ *  nur als Bilder mit leerem alt-Attribut liegen und damit weder durchsuchbar
+ *  noch vorlesbar sind. */
 function Zertifikate() {
   return (
     <Section className="border-t border-line">
-      <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.75rem)] leading-[1.05]">
-        Geprüft, nicht behauptet
-      </h2>
+      <div className="grid gap-x-16 gap-y-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-end">
+        <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.75rem)] leading-[1.05]">
+          Geprüft, nicht behauptet
+        </h2>
+        <p className="max-w-[52ch] text-base leading-relaxed text-muted">
+          Jedes Zertifikat mit Geltungsbereich, Registriernummer und Laufzeit — nachprüfbar
+          beim TÜV SÜD, nicht nur als Logo im Seitenfuß.
+        </p>
+      </div>
+
       <StackReveal className="mt-14 border-t border-line">
         {certifications.map((c) => (
           <div
-            key={c.code}
-            className="grid items-baseline gap-x-10 gap-y-3 border-b border-line py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:py-10"
+            key={c.code + c.full}
+            className="grid items-start gap-x-10 gap-y-4 border-b border-line py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_7rem] md:py-10"
           >
-            <h3 className="text-[clamp(1.6rem,4vw,3rem)] leading-none">{c.code}</h3>
+            <div>
+              <h3 className="text-[clamp(1.5rem,3.4vw,2.6rem)] leading-none">{c.code}</h3>
+              {c.validLabel ? (
+                <p className="mt-3 text-xs uppercase tracking-[0.16em] text-faint nums">
+                  {c.validLabel}
+                </p>
+              ) : null}
+            </div>
+
             <div>
               <p className="text-sm leading-relaxed text-muted">{c.note}</p>
-              <p className="mt-2 text-xs uppercase tracking-[0.16em] text-faint nums">{c.full}</p>
+              {c.scope ? (
+                <p className="mt-3 max-w-[58ch] text-sm leading-relaxed text-fg">
+                  <span className="text-faint">Geltungsbereich: </span>
+                  {c.scope}
+                </p>
+              ) : null}
+              <p className="mt-3 text-xs uppercase tracking-[0.14em] text-faint nums">
+                {c.full}
+                {c.registry ? <> · Reg. {c.registry}</> : null}
+              </p>
             </div>
+
+            {c.image ? (
+              <img
+                src={`${c.image}-420.webp`}
+                srcSet={`${c.image}-420.webp 1x, ${c.image}-840.webp 2x`}
+                alt={`Zertifikat ${c.code} für ${c.scope ?? ''}, ausgestellt von ${c.issuer ?? ''}`}
+                width={420}
+                height={594}
+                loading="lazy"
+                decoding="async"
+                className="w-20 rounded-sm border border-line md:w-28"
+              />
+            ) : null}
           </div>
         ))}
       </StackReveal>

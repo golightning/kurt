@@ -21,6 +21,10 @@
 | Schwesterfirma | Kurt. Cargo. Competence. GmbH (KCC) |
 | Zertifizierungen | DIN EN ISO 9001:2015, DIN ISO 27001:2013, IFS Logistics / IFS Progress Logistics 2024 |
 | Partnerschaft | Offizieller Businesspartner des SSV Ulm 1846 Fußball (Footer-Logo `ssv-grafik-neu.png`) |
+| ISO 9001 (Transporte) | Reg. 12 100 69275/01 TMS · Transport von Komplettladungen und Stückgut · gültig 02.05.2025–01.05.2028 |
+| ISO 9001 (Cargo Competence) | Reg. 12 100 69275/02 TMS · Frachtenvermittler · gültig 02.05.2025–01.05.2028 |
+| IFS Progress Logistics | COID 85369 · Reg. 12 034 62016 TMS · Assessment 12.03.2024, gültig bis 09.05.2025 |
+| ISO 27001 | nur in einer Neuigkeit von 2021 erwähnt, kein Zertifikatsscan vorhanden |
 | Social | Facebook, Instagram |
 
 **Positionierung:** „Regional führender Anbieter ganzheitlicher Logistiklösungen", seit ~3 Jahrzehnten.

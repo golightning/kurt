@@ -21,21 +21,59 @@ export const company = {
   geo: { lat: 48.4258, lng: 9.9589 },
 } as const
 
+// Alle Angaben stammen aus den Zertifikatsscans auf /unsere-zertifizierungen/.
+// Dort liegen sie ausschliesslich als Bilder mit leerem alt-Attribut: Geltungs-
+// bereiche, Registriernummern und Laufzeiten sind weder durchsuchbar noch fuer
+// Screenreader zugaenglich. Hier stehen sie als Text.
 export const certifications = [
   {
     code: 'ISO 9001',
     full: 'DIN EN ISO 9001:2015',
-    note: 'Qualitätsmanagement — zuletzt im Mai 2025 erneut auditiert.',
+    note: 'Qualitätsmanagement für den Transport von Komplettladungen und Stückgut.',
+    scope: 'Transport von Komplettladungen und Stückgut',
+    registry: '12 100 69275/01 TMS',
+    issuer: 'TÜV SÜD Management Service GmbH',
+    validUntil: '2028-05-01',
+    validLabel: 'gültig bis 01.05.2028',
+    image: '/img/zert/iso9001-kurt-transporte',
+  },
+  {
+    code: 'IFS Logistics',
+    full: 'IFS Progress Logistics, Version 1 (Foundation Level)',
+    note: 'Lebensmittelsichere Logistik — bestätigt im Global Markets Assessment.',
+    scope:
+      'Straßentransport von verpackten, nicht kühlpflichtigen Lebensmitteln, Tierfutter, Drogerieartikeln und Non-Food-Produkten',
+    registry: 'COID 85369 · 12 034 62016 TMS',
+    issuer: 'TÜV SÜD Management Service GmbH',
+    validUntil: '2025-05-09',
+    validLabel: 'Assessment vom 12.03.2024',
+    image: '/img/zert/ifs-progress-logistics',
   },
   {
     code: 'ISO 27001',
     full: 'DIN ISO 27001:2013',
     note: 'Informationssicherheit über alle Auftragsdaten hinweg.',
+    // Kein Zertifikatsscan auf der Live-Seite und in den aktuellen Audit-Meldungen
+    // nicht erwaehnt — belegt ist nur eine Neuigkeit von 2021. Deshalb ohne
+    // Geltungsbereich, Registriernummer und Laufzeit: was nicht belegt ist, wird
+    // hier nicht behauptet. Beim Inhaber nachfragen (siehe PITCH.md).
+    scope: null,
+    registry: null,
+    issuer: null,
+    validUntil: null,
+    validLabel: null,
+    image: null,
   },
   {
-    code: 'IFS Logistics',
-    full: 'IFS Progress Logistics 2024',
-    note: 'Lebensmittelsichere Logistik für temperaturgeführte Ladung.',
+    code: 'ISO 9001',
+    full: 'DIN EN ISO 9001:2015 — Kurt. Cargo. Competence. GmbH',
+    note: 'Dieselbe Qualitätsnorm für die Schwestergesellschaft als Frachtenvermittler.',
+    scope: 'Frachtenvermittler für Transporte von Komplettladungen und Stückgut',
+    registry: '12 100 69275/02 TMS',
+    issuer: 'TÜV SÜD Management Service GmbH',
+    validUntil: '2028-05-01',
+    validLabel: 'gültig bis 01.05.2028',
+    image: '/img/zert/iso9001-kurt-cargo-competence',
   },
 ] as const
 
