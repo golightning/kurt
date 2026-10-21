@@ -1,0 +1,16 @@
+# Die Demo ist statisch: fuenf vorgerenderte Seiten, kein Server noetig.
+#
+# Jede Route liegt doppelt vor (<route>/index.html und <route>.html), damit der
+# Direktaufruf mit und ohne abschliessenden Slash dieselbe Seite liefert. Diese
+# Dateien gewinnen gegen die Fallback-Regel unten, weil Netlify zuerst nach
+# einer passenden Datei sucht.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Unbekannte Pfade: echte 404 statt SPA-Fallback mit Status 200.
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404

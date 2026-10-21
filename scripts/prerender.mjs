@@ -87,4 +87,25 @@ await writeFile(
   `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`,
 )
 
-console.log(`\n${pages.length} Seiten prerendert, sitemap.xml und robots.txt geschrieben.`)
+// 404.html: die meisten statischen Hoster (Netlify, Vercel, GitHub Pages,
+// Cloudflare Pages, S3) liefern diese Datei mit HTTP-Status 404 aus. Ohne sie
+// beantwortet der SPA-Fallback jeden unbekannten Pfad mit 200 — die Seite zeigt
+// dann zwar "nicht gefunden", Suchmaschinen indexieren sie aber als gueltig.
+const notFound = render('/nicht-gefunden')
+await writeFile(
+  join(DIST, '404.html'),
+  shell
+    .replace(
+      /<title>[\s\S]*?<\/title>/,
+      `<title>Seite nicht gefunden | KURT Internationale Transporte GmbH</title>\n    ` +
+        [
+          `<meta name="description" content="Diese Adresse existiert nicht. Hier geht es zu Leistungen, Fuhrpark und Kontakt." />`,
+          `<meta name="robots" content="noindex" />`,
+        ].join('\n    '),
+    )
+    .replace('<div id="root"></div>', `<div id="root">${notFound}</div>`),
+)
+
+console.log(
+  `\n${pages.length} Seiten prerendert, dazu 404.html, sitemap.xml und robots.txt.`,
+)
