@@ -17,7 +17,7 @@ export function Fuhrpark() {
           {fleet.map((v) => (
             <article key={v.title} className="reveal bg-ink p-8 transition-colors duration-300 hover:bg-surface">
               <h2 className="text-lg leading-snug">{v.title}</h2>
-              <p className="mt-2 inline-block rounded-sm border border-line px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-red">
+              <p className="mt-2 inline-block rounded-sm border border-line px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-red-hot">
                 {v.spec}
               </p>
               <p className="mt-5 text-sm leading-relaxed text-muted">{v.use}</p>

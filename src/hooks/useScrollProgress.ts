@@ -19,7 +19,11 @@ export function useScrollProgress<T extends HTMLElement>(
   { start = 0.85, end = 0.3 }: { start?: number; end?: number } = {},
 ) {
   const ref = useRef<T>(null)
-  const [progress, setProgress] = useState(0)
+  // Startwert 1, nicht 0: dieser Wert landet im prerenderten HTML. Mit 0 standen
+  // die Kennzahlen dort auf "0,00 m" und 14 Zeilen auf Opazitaet 0,18 — ohne
+  // JavaScript blieb das der Endzustand. Der Effekt setzt sofort auf 0 zurueck,
+  // bevor etwas sichtbar wird; laeuft kein JavaScript, bleibt der volle Zustand.
+  const [progress, setProgress] = useState(1)
   const [reduced, setReduced] = useState(false)
 
   useEffect(() => {
@@ -28,6 +32,7 @@ export function useScrollProgress<T extends HTMLElement>(
       setProgress(1)
       return
     }
+    setProgress(0)
 
     // rAF-gebuendelt: das Scroll-Event feuert oefter als der Browser zeichnet.
     let frame = 0

@@ -17,6 +17,17 @@ export function Header() {
 
   useEffect(() => setOpen(false), [pathname])
 
+  // Escape schliesst das Menue. Ohne das bleibt es per Tastatur nur ueber den
+  // Umweg zurueck zum Button schliessbar.
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    addEventListener('keydown', onKey)
+    return () => removeEventListener('keydown', onKey)
+  }, [open])
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300 ${
@@ -93,8 +104,13 @@ export function Header() {
         </div>
       </div>
 
+      {/* inert im geschlossenen Zustand: `h-0` mit `overflow-hidden` versteckt die
+          Links nur optisch — per Tab waren sie weiterhin erreichbar und der Fokus
+          sprang in ein unsichtbares Menue. */}
       <div
         id="mobile-nav"
+        inert={!open}
+        aria-hidden={!open}
         className={`overflow-hidden border-t border-line transition-[height] duration-300 ease-[var(--ease-out-expo)] md:hidden ${
           open ? 'h-72' : 'h-0'
         }`}
@@ -105,8 +121,9 @@ export function Header() {
               key={item.to}
               to={item.to}
               end={item.to === '/'}
+              onClick={() => setOpen(false)}
               className={({ isActive }) =>
-                `rounded px-2 py-3 text-base font-medium ${isActive ? 'text-red' : 'text-fg'}`
+                `rounded px-2 py-3 text-base font-medium ${isActive ? 'text-red-hot' : 'text-fg'}`
               }
             >
               {item.label}
@@ -114,6 +131,7 @@ export function Header() {
           ))}
           <Link
             to="/angebot"
+            onClick={() => setOpen(false)}
             className="mt-2 rounded-sm bg-red px-5 py-3 text-center text-sm font-semibold text-white"
           >
             Angebot anfordern

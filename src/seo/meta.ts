@@ -15,7 +15,7 @@ export const pages: PageMeta[] = [
     path: '/',
     title: 'KURT Internationale Transporte GmbH — Spedition in Ulm',
     description:
-      'Spedition aus Ulm für nationale und internationale Transporte: hängende Bekleidung, temperaturgeführte Ladung, Filialbelieferung und Sondertransporte. ISO 9001, ISO 27001 und IFS zertifiziert.',
+      'Spedition aus Ulm für nationale und internationale Transporte: hängende Bekleidung, temperaturgeführte Ladung, Filialbelieferung und Sondertransporte. Nach DIN EN ISO 9001:2015 zertifiziert.',
   },
   {
     path: '/leistungen',
@@ -33,7 +33,7 @@ export const pages: PageMeta[] = [
     path: '/angebot',
     title: 'Unverbindliches Angebot anfordern | KURT Internationale Transporte',
     description:
-      'Transportanfrage in unter zwei Minuten: Ladestelle, Entladestelle, Gewicht und Maße angeben — Sie erhalten werktags innerhalb von 24 Stunden ein verbindliches Angebot aus Ulm.',
+      'Transportanfrage in unter zwei Minuten: Strecke, Ladung und Kontakt angeben — die Disposition in Ulm meldet sich mit einem Angebot.',
   },
   {
     path: '/kontakt',

@@ -22,14 +22,18 @@ nennt. Über Zahlen lässt sich dagegen schlecht streiten.
 
 | | Ist-Seite | Demo |
 |---|---|---|
-| HTML, erste Anfrage | **136.243 Bytes** | 7.580 Bytes |
+| HTML, erste Anfrage | **136.243 Bytes** (unkomprimiert ausgeliefert) | 47.294 Bytes roh, **9.688 Bytes gzip** |
 | HTML-Komprimierung | **keine** (mit und ohne `Accept-Encoding: gzip` identisch) | gzip |
 | Bilder gesamt (Originale) | **9,87 MB** | 0,55 MB (−94 %) |
 | Größtes Einzelbild | 2.697 KB JPEG | 116 KB AVIF (−96 %) |
 | Bildformate | nur JPEG/PNG, kein `srcset` | AVIF + WebP, responsive |
-| Initiale Übertragung Startseite | — | **106 KB** (HTML + CSS + JS, gzip) |
+| Initiale Übertragung Startseite | — | **109 KB** (HTML + CSS + JS, gzip) |
 
-Das 3D-Hero (248 KB) lädt erst nach dem ersten Paint und nur auf Geräten mit WebGL2.
+Das 3D-Hero (250 KB gzip) liegt in einem eigenen Chunk, der weder als Script eingebunden
+noch vorgeladen wird — geprüft im ausgelieferten `dist/index.html`. Er wird erst nach dem
+ersten Paint angefordert, und nur auf Geräten mit WebGL2 ohne `prefers-reduced-motion`.
+Das HTML der Demo ist größer als ursprünglich notiert, weil die Seite seither Inhalte
+dazubekommen hat; entscheidend ist der gzip-Wert, den die Live-Seite gar nicht nutzt.
 
 ### Auffindbarkeit bei Google
 
@@ -38,8 +42,8 @@ Das 3D-Hero (248 KB) lädt erst nach dem ersten Paint und nur auf Geräten mit W
 | `<meta name="description">` | **fehlt auf der Startseite** | je Seite individuell |
 | Sitemap | **fehlt** (`/sitemap.xml` liefert eine 404-Seite) | `sitemap.xml` |
 | `robots.txt` | WordPress-Standard, kein Sitemap-Verweis | mit Sitemap-Verweis |
-| Open-Graph-Tags | **keine** → kein Vorschaubild beim Teilen | vollständig |
-| LocalBusiness-Schema | **keines** | `MovingCompany` mit Adresse, Geo-Koordinaten, Öffnungszeiten, Zertifikaten |
+| Open-Graph-Tags | **keine** → kein Vorschaubild beim Teilen | Titel, Beschreibung, URL und `og:image` (1200×630) |
+| LocalBusiness-Schema | **keines** | `MovingCompany` mit Adresse, Geo-Koordinaten, Öffnungszeiten, Zertifikaten (`hasCredential`) und Sponsoring |
 | `<h1>` auf der Startseite | **keines** (beginnt bei H4) | auf jeder Seite genau eines |
 | Text auf der Zertifizierungsseite | **0 Wörter** (reine Bildergalerie) | — |
 

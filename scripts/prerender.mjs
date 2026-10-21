@@ -24,6 +24,14 @@ const headFor = (page) => {
     `<meta property="og:title" content="${esc(page.title)}" />`,
     `<meta property="og:description" content="${esc(page.description)}" />`,
     `<meta property="og:url" content="${canonical}" />`,
+    // og:image fehlte: beim Teilen in WhatsApp, LinkedIn oder Slack blieb die
+    // Vorschau leer. 1200x630 ist das Format, das alle gaengigen Dienste erwarten.
+    `<meta property="og:image" content="${SITE_URL}/og-image.png" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta property="og:image:alt" content="KURT Internationale Transporte GmbH — Ganzheitliche Logistikloesungen aus Ulm" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:image" content="${SITE_URL}/og-image.png" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
     `<script type="application/ld+json">${JSON.stringify(organizationJsonLd)}</script>`,
   ].join('\n    ')
@@ -39,10 +47,27 @@ for (const page of pages) {
     )
     .replace('<div id="root"></div>', `<div id="root">${html}</div>`)
 
-  const dir = page.path === '/' ? DIST : join(DIST, page.path.slice(1))
-  await mkdir(dir, { recursive: true })
-  await writeFile(join(dir, 'index.html'), out)
-  console.log(`  ${page.path.padEnd(14)} -> ${join(dir, 'index.html')}  (${(out.length / 1024).toFixed(1)} KB)`)
+  // Zwei Dateien je Route: <route>/index.html UND <route>.html.
+  //
+  // Mit nur der Ordnervariante liefert ein Aufruf ohne abschliessenden Slash
+  // (/kontakt) bei `vite preview` und bei vielen statischen Hostern den
+  // SPA-Fallback, also das Startseiten-HTML. Der Client baut die Seite dann neu
+  // auf und meldet dabei eine Hydration-Abweichung (React #418). Interne Links
+  // und die Sitemap nutzen Pfade ohne Slash, also ist das der haeufigere Fall.
+  // Die zweite Datei kostet wenige KB und macht beide Schreibweisen korrekt.
+  if (page.path === '/') {
+    await writeFile(join(DIST, 'index.html'), out)
+    console.log(`  ${page.path.padEnd(14)} -> dist/index.html  (${(out.length / 1024).toFixed(1)} KB)`)
+  } else {
+    const slug = page.path.slice(1)
+    const dir = join(DIST, slug)
+    await mkdir(dir, { recursive: true })
+    await writeFile(join(dir, 'index.html'), out)
+    await writeFile(join(DIST, `${slug}.html`), out)
+    console.log(
+      `  ${page.path.padEnd(14)} -> dist/${slug}/index.html + dist/${slug}.html  (${(out.length / 1024).toFixed(1)} KB)`,
+    )
+  }
 }
 
 // Sitemap and robots — both absent on the live site.

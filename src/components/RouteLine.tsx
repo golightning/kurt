@@ -149,39 +149,52 @@ export function RouteLine() {
         Relation: Ulm, München, Wien, Budapest, Belgrad, Istanbul — mit Abzweig nach Thessaloniki.
       </p>
 
+      {/* Randnahe Haltepunkte werden nach innen ausgerichtet statt zentriert:
+          "Hoervelsingerweg 52/2" unter Ulm (3 % Breite) begann bei 390 px rund
+          29 px links ausserhalb und wurde vom Abschnitt abgeschnitten — ohne
+          Scrollbalken, der darauf hingewiesen haette. */}
       <div className="pointer-events-none absolute inset-0">
-        {[...STOPS, BRANCH[2]].map((s) => (
+        {[...STOPS, BRANCH[2]].map((s) => {
+          const edge = s.x < 12 ? 'start' : s.x > 82 ? 'end' : 'center'
+          const shift =
+            edge === 'start' ? '0' : edge === 'end' ? '-100%' : '-50%'
+          const align =
+            edge === 'start' ? 'text-left' : edge === 'end' ? 'text-right' : 'text-center'
+          const dot =
+            edge === 'start' ? 'ml-0' : edge === 'end' ? 'ml-auto mr-0' : 'mx-auto'
+          return (
           <span
             key={s.name}
-            className={`absolute transition-opacity duration-500 ease-[var(--ease-out-expo)] ${s.above ? "" : "-translate-x-1/2"}`}
+            className="absolute transition-opacity duration-500 ease-[var(--ease-out-expo)]"
             style={{
               left: `${s.x}%`,
               top: `${s.y}%`,
-              transform: s.above ? 'translate(-50%, -100%)' : undefined,
+              transform: s.above ? `translate(${shift}, -100%)` : `translateX(${shift})`,
               opacity: reached(s.x) ? 1 : 0.2,
             }}
           >
             {/* nur der Punkt sitzt auf der Koordinate, die Beschriftung haengt darunter */}
             {s.above ? (
-              <span className="mb-2.5 block whitespace-nowrap text-center text-sm font-semibold text-fg">
+              <span className={`mb-2.5 block whitespace-nowrap text-sm font-semibold text-fg ${align}`}>
                 {s.name}
               </span>
             ) : null}
-            <span className="mx-auto block h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-fg ring-4 ring-ink-2" />
+            <span className={`block h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-fg ring-4 ring-ink-2 ${dot}`} />
             {!s.above ? (
               <>
-                <span className="mt-2.5 block whitespace-nowrap text-center text-sm font-semibold text-fg">
+                <span className={`mt-2.5 block whitespace-nowrap text-sm font-semibold text-fg ${align}`}>
                   {s.name}
                 </span>
                 {s.note ? (
-                  <span className="mt-0.5 block whitespace-nowrap text-center text-xs text-muted">
+                  <span className={`mt-0.5 block whitespace-nowrap text-xs text-muted ${align}`}>
                     {s.note}
                   </span>
                 ) : null}
               </>
             ) : null}
           </span>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

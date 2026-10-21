@@ -6,6 +6,7 @@ import { Home } from '@/pages/Home'
 import { Leistungen } from '@/pages/Leistungen'
 import { Fuhrpark } from '@/pages/Fuhrpark'
 import { Angebot } from '@/pages/Angebot'
+import { NichtGefunden } from '@/pages/NichtGefunden'
 import { Kontakt } from '@/pages/Kontakt'
 import { metaFor, SITE_URL } from '@/seo/meta'
 
@@ -69,7 +70,7 @@ export function App() {
         <Route path="/fuhrpark" element={<Fuhrpark />} />
         <Route path="/angebot" element={<Angebot />} />
         <Route path="/kontakt" element={<Kontakt />} />
-        <Route path="*" element={<Home />} />
+        <Route path="*" element={<NichtGefunden />} />
       </Route>
     </Routes>
   )

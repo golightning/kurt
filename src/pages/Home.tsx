@@ -271,22 +271,33 @@ function Zertifikate() {
           Geprüft, nicht behauptet
         </h2>
         <p className="max-w-[52ch] text-base leading-relaxed text-muted">
-          Jedes Zertifikat mit Geltungsbereich, Registriernummer und Laufzeit — nachprüfbar
-          beim TÜV SÜD, nicht nur als Logo im Seitenfuß.
+          Mit Geltungsbereich, Registriernummer und Laufzeit, wo ein Nachweis vorliegt —
+          nachprüfbar beim TÜV SÜD statt nur als Logo im Seitenfuß.
         </p>
       </div>
 
       <StackReveal className="mt-14 border-t border-line">
         {certifications.map((c) => (
           <div
-            key={c.code + c.full}
+            key={c.id}
             className="grid items-start gap-x-10 gap-y-4 border-b border-line py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_7rem] md:py-10"
           >
             <div>
               <h3 className="text-[clamp(1.5rem,3.4vw,2.6rem)] leading-none">{c.code}</h3>
               {c.validLabel ? (
-                <p className="mt-3 text-xs uppercase tracking-[0.16em] text-faint nums">
+                <p className="mt-3 text-xs uppercase tracking-[0.16em] text-dim nums">
                   {c.validLabel}
+                </p>
+              ) : null}
+              {/* Status offen ausweisen statt zu behaupten: beim ungeklaerten
+                  Eintrag fehlt der Nachweis, beim IFS-Dokument ist die
+                  Bestaetigung abgelaufen. Beides gehoert vor den Kundentermin
+                  auf den Tisch, nicht hinter eine Behauptung. */}
+              {c.status === 'ungeklaert' || c.renewalOpen ? (
+                <p className="mt-3 inline-block rounded-sm border border-line px-2 py-1 text-xs text-dim">
+                  {c.status === 'ungeklaert'
+                    ? 'Nachweis liegt uns nicht vor'
+                    : 'Folgebestätigung ausstehend'}
                 </p>
               ) : null}
             </div>
@@ -306,16 +317,31 @@ function Zertifikate() {
             </div>
 
             {c.image ? (
-              <img
-                src={`${c.image}-420.webp`}
-                srcSet={`${c.image}-420.webp 1x, ${c.image}-840.webp 2x`}
-                alt={`Zertifikat ${c.code} für ${c.scope ?? ''}, ausgestellt von ${c.issuer ?? ''}`}
-                width={420}
-                height={594}
-                loading="lazy"
-                decoding="async"
-                className="w-20 rounded-sm border border-line md:w-28"
-              />
+              /* Zum Lesen oeffnen: in der Vorschau sind die Scans 80 bzw. 112 px
+                 breit und damit unlesbar. Die Quelle hat nur 424x600 — eine
+                 groessere Fassung existiert nicht, deshalb der direkte Link
+                 statt eines Dialogs, der nichts Zusaetzliches zeigen koennte. */
+              <a
+                href={`${c.image}-full.webp`}
+                target="_blank"
+                rel="noopener"
+                className="group block w-20 shrink-0 md:w-28"
+                aria-label={`Zertifikat ${c.code} in lesbarer Größe öffnen`}
+              >
+                <img
+                  src={`${c.image}-420.webp`}
+                  srcSet={`${c.image}-420.webp 1x, ${c.image}-840.webp 2x`}
+                  alt={`Zertifikat ${c.code} für ${c.scope ?? ''}, ausgestellt von ${c.issuer ?? ''}`}
+                  width={420}
+                  height={594}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full rounded-sm border border-line transition-colors duration-200 group-hover:border-red"
+                />
+                <span className="mt-2 block text-center text-[0.65rem] text-dim transition-colors duration-200 group-hover:text-red-hot">
+                  Vergrößern
+                </span>
+              </a>
             ) : null}
           </div>
         ))}
@@ -368,8 +394,8 @@ function ClosingCta() {
           Sagen Sie uns, was wohin soll. Den Rest klären wir.
         </h2>
         <p className="reveal mt-6 max-w-xl text-lg text-muted">
-          Ladestelle, Entladestelle, Gewicht und Maße genügen für ein Angebot. Werktags antworten wir
-          innerhalb von 24 Stunden.
+          Strecke, Ladung und Ihre Kontaktdaten genügen für ein Angebot — in zwei Minuten
+          ausgefüllt.
         </p>
         <div className="reveal mt-10">
           <Link

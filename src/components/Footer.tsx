@@ -56,15 +56,19 @@ export function Footer() {
           <h2 className="mt-8 text-xs font-semibold uppercase tracking-[0.2em] text-faint">
             Zertifiziert
           </h2>
+          {/* Nur was durch einen Zertifikatsscan belegt ist. ISO 27001 steht auf
+              der Startseite mit offenem Status und gehoert nicht in diese Liste. */}
           <ul className="mt-4 flex flex-wrap gap-2">
-            {certifications.map((c) => (
-              <li
-                key={c.code}
-                className="rounded-sm border border-line px-2.5 py-1 text-xs font-medium text-muted"
-              >
-                {c.code}
-              </li>
-            ))}
+            {certifications
+              .filter((c) => c.status === 'belegt')
+              .map((c) => (
+                <li
+                  key={c.id}
+                  className="rounded-sm border border-line px-2.5 py-1 text-xs font-medium text-muted"
+                >
+                  {c.label}
+                </li>
+              ))}
           </ul>
         </div>
       </div>

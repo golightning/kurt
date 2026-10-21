@@ -1,13 +1,18 @@
+import type { RefObject } from 'react'
 import { Reveal } from '@/components/ui'
 
 export function PageHero({
   eyebrow,
   title,
   lead,
+  titleRef,
 }: {
   eyebrow: string
   title: string
   lead?: string
+  /** Erlaubt es der Seite, den Fokus auf die Ueberschrift zu setzen — etwa nach
+   *  dem Absenden eines Formulars, damit Screenreader die neue Lage ansagen. */
+  titleRef?: RefObject<HTMLHeadingElement | null>
 }) {
   return (
     <section className="relative overflow-hidden border-b border-line pt-20">
@@ -18,7 +23,11 @@ export function PageHero({
       />
       <Reveal className="shell relative py-24 md:py-32">
         <p className="eyebrow reveal">{eyebrow}</p>
-        <h1 className="reveal mt-5 max-w-4xl text-[clamp(2.25rem,5.5vw,4rem)] leading-[1.02]">
+        <h1
+          ref={titleRef}
+          tabIndex={titleRef ? -1 : undefined}
+          className="reveal mt-5 max-w-4xl text-[clamp(2.25rem,5.5vw,4rem)] leading-[1.02] outline-none"
+        >
           {title}
         </h1>
         {lead ? (

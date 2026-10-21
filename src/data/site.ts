@@ -25,9 +25,31 @@ export const company = {
 // Dort liegen sie ausschliesslich als Bilder mit leerem alt-Attribut: Geltungs-
 // bereiche, Registriernummern und Laufzeiten sind weder durchsuchbar noch fuer
 // Screenreader zugaenglich. Hier stehen sie als Text.
-export const certifications = [
+export type Certification = {
+  id: string
+  /** 'belegt' = Zertifikatsscan liegt vor. 'ungeklaert' = nur eine Erwaehnung,
+   *  kein Nachweis — wird auf der Seite als solcher ausgewiesen. */
+  status: 'belegt' | 'ungeklaert'
+  code: string
+  label: string
+  full: string
+  note: string
+  scope: string | null
+  registry: string | null
+  issuer: string | null
+  validUntil: string | null
+  validLabel: string | null
+  image: string | null
+  /** Das hinterlegte Dokument ist abgelaufen, ein Nachfolger liegt nicht vor. */
+  renewalOpen?: boolean
+}
+
+export const certifications: Certification[] = [
   {
+    id: 'iso9001-transporte',
+    status: 'belegt',
     code: 'ISO 9001',
+    label: 'ISO 9001 (Transporte)',
     full: 'DIN EN ISO 9001:2015',
     note: 'Qualitätsmanagement für den Transport von Komplettladungen und Stückgut.',
     scope: 'Transport von Komplettladungen und Stückgut',
@@ -38,7 +60,10 @@ export const certifications = [
     image: '/img/zert/iso9001-kurt-transporte',
   },
   {
+    id: 'ifs-progress',
+    status: 'belegt',
     code: 'IFS Logistics',
+    label: 'IFS Logistics',
     full: 'IFS Progress Logistics, Version 1 (Foundation Level)',
     note: 'Lebensmittelsichere Logistik — bestätigt im Global Markets Assessment.',
     scope:
@@ -46,11 +71,18 @@ export const certifications = [
     registry: 'COID 85369 · 12 034 62016 TMS',
     issuer: 'TÜV SÜD Management Service GmbH',
     validUntil: '2025-05-09',
-    validLabel: 'Assessment vom 12.03.2024',
+    validLabel: 'Assessment 12.03.2024, Bestätigung bis 09.05.2025',
+    // Das hinterlegte Dokument ist abgelaufen. Ein Nachfolgenachweis liegt auf der
+    // Live-Seite nicht vor, deshalb wird der Stand offen ausgewiesen statt
+    // "zertifiziert" zu behaupten.
+    renewalOpen: true,
     image: '/img/zert/ifs-progress-logistics',
   },
   {
+    id: 'iso27001',
+    status: 'ungeklaert',
     code: 'ISO 27001',
+    label: 'ISO 27001',
     full: 'DIN ISO 27001:2013',
     note: 'Informationssicherheit über alle Auftragsdaten hinweg.',
     // Kein Zertifikatsscan auf der Live-Seite und in den aktuellen Audit-Meldungen
@@ -65,7 +97,10 @@ export const certifications = [
     image: null,
   },
   {
+    id: 'iso9001-cargo',
+    status: 'belegt',
     code: 'ISO 9001',
+    label: 'ISO 9001 (Cargo Competence)',
     full: 'DIN EN ISO 9001:2015 — Kurt. Cargo. Competence. GmbH',
     note: 'Dieselbe Qualitätsnorm für die Schwestergesellschaft als Frachtenvermittler.',
     scope: 'Frachtenvermittler für Transporte von Komplettladungen und Stückgut',
@@ -75,7 +110,7 @@ export const certifications = [
     validLabel: 'gültig bis 01.05.2028',
     image: '/img/zert/iso9001-kurt-cargo-competence',
   },
-] as const
+]
 
 /** Offizieller Businesspartner des SSV Ulm 1846 Fussball. Auf der Live-Seite nur
  *  als Logo im Footer, mit leerem alt-Attribut — fuer Suchmaschinen und

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { PageHero } from '@/components/PageHero'
 import { Reveal, Section } from '@/components/ui'
 import { company, ladungsarten, transportarten } from '@/data/site'
@@ -42,6 +42,11 @@ export function Angebot() {
   const [v, setV] = useState<Fields>(EMPTY)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [done, setDone] = useState(false)
+  // Sperrt den Submit fuer einen Tick nach dem Schrittwechsel, damit der Klick,
+  // der "Weiter" ausgeloest hat, nicht auch den an dieselbe Stelle gerueckten
+  // Absenden-Button trifft.
+  const justAdvanced = useRef(false)
+  const doneRef = useRef<HTMLHeadingElement>(null)
 
   const errors = useMemo(() => {
     const e: Partial<Record<keyof Fields, string>> = {}
@@ -61,6 +66,17 @@ export function Angebot() {
   const set = (k: keyof Fields) => (e: { target: { value: string } }) =>
     setV((prev) => ({ ...prev, [k]: e.target.value }))
 
+  // Nach dem Absenden bleibt sonst die alte Scrollposition stehen; bei 390 px
+  // lag die Danke-Ueberschrift 333 px oberhalb des sichtbaren Bereichs.
+  useEffect(() => {
+    if (!done) return
+    const el = doneRef.current
+    if (!el) return
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' })
+    el.focus({ preventScroll: true })
+  }, [done])
+
   const markTouched = () =>
     setTouched((prev) => ({
       ...prev,
@@ -70,12 +86,15 @@ export function Angebot() {
   if (done) {
     return (
       <>
-        <PageHero eyebrow="Anfrage" title="Danke — das genügt uns." />
+        <PageHero
+          eyebrow="Anfrage"
+          title="Danke — das genügt uns."
+          titleRef={doneRef}
+        />
         <Section>
           <Reveal className="max-w-2xl">
             <p className="reveal text-lg leading-relaxed text-muted">
-              In der fertigen Seite ginge Ihre Anfrage jetzt an die Disposition und Sie bekämen
-              werktags innerhalb von 24 Stunden ein Angebot.
+              In der fertigen Seite ginge Ihre Anfrage jetzt direkt an die Disposition in Ulm.
             </p>
             <div className="reveal mt-8 rounded-sm border border-red/30 bg-red/5 p-5 text-sm leading-relaxed text-muted">
               <strong className="text-fg">Hinweis zur Demo:</strong> Dieses Formular versendet
@@ -103,8 +122,8 @@ export function Angebot() {
     <>
       <PageHero
         eyebrow="Unverbindliches Angebot"
-        title="Vier Angaben, dann rechnen wir"
-        lead="Ladestelle, Entladestelle, Gewicht und Art der Ladung genügen für ein belastbares Angebot."
+        title="Drei Schritte, dann rechnen wir"
+        lead="Strecke, Ladung, Kontakt — in zwei Minuten ausgefüllt. Für ein belastbares Angebot genügt, was hier abgefragt wird."
       />
 
       <Section>
@@ -134,6 +153,7 @@ export function Angebot() {
               className="reveal mt-12"
               onSubmit={(e) => {
                 e.preventDefault()
+                if (justAdvanced.current) return
                 markTouched()
                 if (Object.keys(errors).length === 0) setDone(true)
               }}
@@ -147,7 +167,7 @@ export function Angebot() {
                   <Field label="Entladestelle" hint="PLZ und Ort genügen" error={touched.entladestelle ? errors.entladestelle : undefined}>
                     <input className={inputCls} value={v.entladestelle} onChange={set('entladestelle')} placeholder="34000 Istanbul" autoComplete="off" />
                   </Field>
-                  <Field label="Art des Transports" className="sm:col-span-2" error={touched.transportart ? errors.transportart : undefined}>
+                  <Field label="Art des Transports" asGroup className="sm:col-span-2" error={touched.transportart ? errors.transportart : undefined}>
                     <ChipGroup options={transportarten} value={v.transportart} onChange={(val) => setV((p) => ({ ...p, transportart: val }))} />
                   </Field>
                 </div>
@@ -161,7 +181,7 @@ export function Angebot() {
                   <Field label="Maße" hint="Länge × Breite × Höhe in m — optional">
                     <input className={inputCls} value={v.masse} onChange={set('masse')} placeholder="13,60 × 2,45 × 2,75" />
                   </Field>
-                  <Field label="Art der Ladung" className="sm:col-span-2" error={touched.ladungsart ? errors.ladungsart : undefined}>
+                  <Field label="Art der Ladung" asGroup className="sm:col-span-2" error={touched.ladungsart ? errors.ladungsart : undefined}>
                     <ChipGroup options={ladungsarten} value={v.ladungsart} onChange={(val) => setV((p) => ({ ...p, ladungsart: val }))} />
                   </Field>
                   <Field label="Anmerkungen" hint="Optional" className="sm:col-span-2">
@@ -205,7 +225,15 @@ export function Angebot() {
                     type="button"
                     onClick={() => {
                       markTouched()
-                      if (stepValid) setStep((s) => s + 1)
+                      if (stepValid) {
+                        justAdvanced.current = true
+                        setStep((s) => s + 1)
+                        // Im naechsten Frame wieder freigeben: dann ist der
+                        // ausloesende Klick lange durch.
+                        requestAnimationFrame(() => {
+                          justAdvanced.current = false
+                        })
+                      }
                     }}
                     className="rounded-sm bg-red px-7 py-3 text-sm font-semibold text-white transition-[background-color,transform] duration-200 hover:bg-red-hot active:scale-[0.98]"
                   >
@@ -258,20 +286,39 @@ function Field({
   error,
   className = '',
   children,
+  asGroup = false,
 }: {
   label: string
   hint?: string
   error?: string
   className?: string
   children: React.ReactNode
+  /** Fuer Gruppen aus Buttons statt eines Eingabefelds. Ein `label` um mehrere
+   *  Buttons gibt dem ERSTEN den Gruppentext als zugaenglichen Namen — der
+   *  Transport-Button war dadurch nicht unter "Komplettladung (FTL)"
+   *  ansprechbar, sondern unter dem Text der ganzen Gruppe. */
+  asGroup?: boolean
 }) {
+  const head = (
+    <>
+      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{label}</span>
+      {hint && !error ? <span className="text-[0.65rem] text-faint">{hint}</span> : null}
+      {error ? <span className="text-[0.65rem] font-medium text-red-hot">{error}</span> : null}
+    </>
+  )
+
+  if (asGroup) {
+    return (
+      <fieldset className={`block border-0 p-0 ${className}`}>
+        <legend className="flex w-full items-baseline justify-between gap-3">{head}</legend>
+        <div className="mt-2.5 block">{children}</div>
+      </fieldset>
+    )
+  }
+
   return (
     <label className={`block ${className}`}>
-      <span className="flex items-baseline justify-between gap-3">
-        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{label}</span>
-        {hint && !error ? <span className="text-[0.65rem] text-faint">{hint}</span> : null}
-        {error ? <span className="text-[0.65rem] font-medium text-red-hot">{error}</span> : null}
-      </span>
+      <span className="flex items-baseline justify-between gap-3">{head}</span>
       <span className="mt-2.5 block">{children}</span>
     </label>
   )

@@ -17,7 +17,12 @@
 
   --color-fg: #f4f4f6;
   --color-muted: #9b9ba6;
-  --color-faint: #6b6b78;
+  /* 4,5:1 gegen --color-ink ist die AA-Schwelle fuer kleine Schrift. Der alte
+     Wert #6b6b78 kam auf 3,81:1 und wurde von axe auf allen fuenf Seiten
+     beanstandet. #80808d misst 5,14:1 und bleibt optisch zurueckhaltend. */
+  --color-faint: #80808d;
+  /* Gedaempfter Statuston, gleiche Schwelle. */
+  --color-dim: #868694;
 
   --font-display: 'Archivo', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
