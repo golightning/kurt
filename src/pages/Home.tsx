@@ -6,7 +6,7 @@ import { TrailerScale } from '@/components/TrailerScale'
 import { StackReveal } from '@/components/StackReveal'
 import { ScrollCounter, ScrollProgressAnchor } from '@/components/ScrollCounter'
 import { Picture, Reveal, Section } from '@/components/ui'
-import { certifications, reach, services, sustainability, values } from '@/data/site'
+import { certifications, partnership, reach, services, sustainability, values } from '@/data/site'
 
 export function Home() {
   return (
@@ -279,6 +279,31 @@ function Zertifikate() {
           </div>
         ))}
       </StackReveal>
+
+      {/* Die Partnerschaft ist kein Zertifikat und steht deshalb abgesetzt. Auf der
+          Live-Seite liegt sie als Logo mit leerem alt-Attribut im Footer — hier
+          traegt sie Text, damit Suchmaschinen und Screenreader sie erfassen. */}
+      <Reveal className="mt-12">
+        <div className="reveal grid items-center gap-x-12 gap-y-6 md:grid-cols-[minmax(0,20rem)_1fr]">
+          <img
+            src={`${partnership.logo}.webp`}
+            alt={`${partnership.role} des ${partnership.name}`}
+            width={500}
+            height={150}
+            loading="lazy"
+            decoding="async"
+            className="h-auto w-full max-w-[19rem]"
+          />
+          <div>
+            <h3 className="text-lg leading-snug">
+              {partnership.role} des {partnership.name}
+            </h3>
+            <p className="mt-2 max-w-[58ch] text-sm leading-relaxed text-muted">
+              {partnership.note}
+            </p>
+          </div>
+        </div>
+      </Reveal>
     </Section>
   )
 }

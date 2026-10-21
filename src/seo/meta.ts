@@ -1,4 +1,4 @@
-import { company } from '@/data/site'
+import { company, partnership } from '@/data/site'
 
 export const SITE_URL = 'https://kurt-transport.com'
 
@@ -78,6 +78,13 @@ export const organizationJsonLd = {
       closes: '17:00',
     },
   ],
+  // Die Partnerschaft mit dem SSV Ulm belegt die regionale Verankerung — fuer
+  // lokale Suchanfragen ein echtes Signal. Live existiert sie nur als Logo mit
+  // leerem alt-Attribut und ist damit maschinell unsichtbar.
+  sponsor: {
+    '@type': 'SportsTeam',
+    name: partnership.name,
+  },
   areaServed: [
     { '@type': 'Country', name: 'Deutschland' },
     { '@type': 'Place', name: 'West- und Zentraleuropa' },

@@ -20,6 +20,7 @@
 | Registergericht | Ulm |
 | Schwesterfirma | Kurt. Cargo. Competence. GmbH (KCC) |
 | Zertifizierungen | DIN EN ISO 9001:2015, DIN ISO 27001:2013, IFS Logistics / IFS Progress Logistics 2024 |
+| Partnerschaft | Offizieller Businesspartner des SSV Ulm 1846 Fußball (Footer-Logo `ssv-grafik-neu.png`) |
 | Social | Facebook, Instagram |
 
 **Positionierung:** „Regional führender Anbieter ganzheitlicher Logistiklösungen", seit ~3 Jahrzehnten.

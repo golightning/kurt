@@ -39,6 +39,16 @@ export const certifications = [
   },
 ] as const
 
+/** Offizieller Businesspartner des SSV Ulm 1846 Fussball. Auf der Live-Seite nur
+ *  als Logo im Footer, mit leerem alt-Attribut — fuer Suchmaschinen und
+ *  Screenreader also unsichtbar. */
+export const partnership = {
+  name: 'SSV Ulm 1846 Fußball',
+  role: 'Offizieller Businesspartner',
+  note: 'Regional verwurzelt: KURT unterstützt den Fußballverein der Stadt, in der das Unternehmen seit über 30 Jahren fährt.',
+  logo: '/img/partner/ssv-ulm-businesspartner',
+} as const
+
 export type Service = {
   slug: string
   title: string
