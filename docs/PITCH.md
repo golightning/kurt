@@ -117,3 +117,22 @@ zusagen, statt es wegzureden.
 **„Brauche ich 3D?"**
 Nein. Es ist der Aufhänger, nicht das Produkt. Die messbaren Vorteile sind Ladezeit,
 Auffindbarkeit und ein Formular, das tatsächlich zu einer Anfrage führt.
+
+---
+
+## 6. Offene Fragen an den Inhaber
+
+**SSV Ulm / Partnerschaften.** Auf der heutigen Live-Seite steht kein Hinweis auf
+eine Partnerschaft mit dem SSV Ulm — weder im Impressum noch auf Start,
+Unternehmen, Neuigkeiten, Kontakt oder Zertifizierungen (am 21.10.2026 alle
+abgerufen und durchsucht; Gegenprobe mit einem Wort, das sicher vorkommt,
+bestätigt die Suche). Entweder stand es früher dort und wurde entfernt, oder es
+gibt die Verbindung ausserhalb der Website.
+
+Beides ist ein gutes Gespraechsthema statt eines Problems: regionale
+Sichtbarkeit ist fuer eine Spedition im Mittelstand ein echtes Argument bei
+Personalgewinnung und lokalen Auftraggebern. Falls die Partnerschaft besteht,
+gehoert sie auf die Startseite und nicht ins Impressum — als Beleg dafuer, dass
+das Unternehmen in Ulm verankert ist.
+
+Nicht erfinden: ohne Bestaetigung des Inhabers bleibt das aus der Demo heraus.

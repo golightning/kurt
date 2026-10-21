@@ -46,14 +46,28 @@ export function ScrollCounter({
   to,
   suffix = '',
   decimals = 0,
+  from = 0.45,
 }: {
   to: number
   suffix?: string
   decimals?: number
+  /** Ab welchem Anteil des Ankerfortschritts gezaehlt wird. Der Anker richtet
+   *  sich nach der Zeichnung; die Zahlen stehen darunter und sind erst spaeter
+   *  im Bild. Ohne Versatz war der Zaehler bei ihrem ersten Erscheinen schon
+   *  ueber die Haelfte gelaufen (gemessen: 7,20 von 13,60 m bei 48 % sichtbar)
+   *  und am Ziel, bevor die Zeichnung aus dem Bild war. */
+  from?: number
 }) {
   const shared = useContext(ProgressContext)
   const own = useScrollProgress<HTMLSpanElement>({ start: 1.0, end: 0.55 })
-  const progress = shared ?? own.progress
+  const raw = shared ?? own.progress
+  // Auf das Restfenster strecken: bei `from` startet die Zahl bei 0 und ist am
+  // Ende des Ankers am Zielwert.
+  // `span` statt bis 1 zu strecken: die Zahl soll ihr Ziel erreichen, solange
+  // sie voll im Bild steht, nicht erst am Ende des Ankerfensters.
+  const span = 0.3
+  const progress =
+    shared === null ? raw : Math.max(0, Math.min(1, (raw - from) / span))
   const value = (to * progress).toFixed(decimals).replace('.', ',')
   return (
     <span ref={shared === null ? own.ref : undefined} className="nums tabular-nums">

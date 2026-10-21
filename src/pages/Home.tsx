@@ -181,26 +181,26 @@ function Masse() {
         {/* Ein Anker fuer Zeichnung UND Kennzahlen: beide haengen am Fortschritt des
             Abschnitts, nicht an ihrer je eigenen Position — sonst zaehlen die Zahlen
             erst los, wenn die Bemassung oben schon fertig ist. */}
-        <ScrollProgressAnchor className="mt-12 md:mt-16" start={0.92} end={0.52}>
+        <ScrollProgressAnchor className="mt-12 md:mt-16" start={0.92} end={0.12}>
           <TrailerScale />
 
           <dl className="mt-10 grid gap-x-12 gap-y-8 border-t border-line pt-10 sm:grid-cols-3">
           <div>
             <dt className="text-sm text-muted">Ladelänge</dt>
             <dd className="mt-1 text-[clamp(1.6rem,3.2vw,2.4rem)] leading-none text-fg">
-              <ScrollCounter to={13.6} decimals={2} suffix=" m" />
+              <ScrollCounter to={13.6} decimals={2} suffix=" m" from={0.3} />
             </dd>
           </div>
           <div>
             <dt className="text-sm text-muted">Lichte Innenhöhe</dt>
             <dd className="mt-1 text-[clamp(1.6rem,3.2vw,2.4rem)] leading-none text-fg">
-              <ScrollCounter to={2.75} decimals={2} suffix=" m" />
+              <ScrollCounter to={2.75} decimals={2} suffix=" m" from={0.3} />
             </dd>
           </div>
           <div>
             <dt className="text-sm text-muted">Fahrzeugtypen im Haus</dt>
             <dd className="mt-1 text-[clamp(1.6rem,3.2vw,2.4rem)] leading-none text-fg">
-              <ScrollCounter to={6} />
+              <ScrollCounter to={6} from={0.3} />
             </dd>
           </div>
           </dl>

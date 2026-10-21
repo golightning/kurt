@@ -42,10 +42,13 @@ export function TrailerScale() {
   // erst, als die Zeichnung schon wieder aus dem Bild lief. Jetzt setzt jede
   // Phase ein, waehrend die vorige noch laeuft — der Aufbau ist bei ~75 % des
   // Wegs fertig, also solange die Zeichnung voll im Bild steht.
-  const pOutline = phase(progress, 0.0, 0.2)
-  const pHeight = phase(progress, 0.14, 0.34)
-  const pLength = phase(progress, 0.26, 0.46)
-  const pBars = phase(progress, 0.36, 0.7)
+  // Halbiert, weil das Ankerfenster verdoppelt wurde (0.92/0.52 -> 0.92/0.12):
+  // der Anker muss bis zu den Kennzahlen darunter reichen, die Zeichnung soll
+  // aber weiterhin fertig sein, sobald sie mittig im Bild steht.
+  const pOutline = phase(progress, 0.0, 0.1)
+  const pHeight = phase(progress, 0.07, 0.17)
+  const pLength = phase(progress, 0.13, 0.23)
+  const pBars = phase(progress, 0.18, 0.35)
 
   const bars = 12
   const barsShown = reduced ? bars : Math.round(pBars * bars)
