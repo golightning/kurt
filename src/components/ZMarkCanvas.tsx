@@ -10,7 +10,13 @@ import {
 /** The mark itself. The geometry comes from the generated factory, which extrudes the
  *  contours measured off the original logo raster — so this is the client's own mark in
  *  three dimensions, not a lookalike. */
-function Mark({ pointer }: { pointer: React.RefObject<{ x: number; y: number }> }) {
+function Mark({
+  pointer,
+  scroll,
+}: {
+  pointer: React.RefObject<{ x: number; y: number }>
+  scroll: React.RefObject<number>
+}) {
   const group = useRef<THREE.Group>(null)
   const model = useMemo(() => {
     const m = createKURTZBrandMarkModel()
@@ -26,11 +32,26 @@ function Mark({ pointer }: { pointer: React.RefObject<{ x: number; y: number }> 
     if (!group.current) return
     const t = state.clock.elapsedTime
     const p = pointer.current ?? { x: 0, y: 0 }
-    // Slow idle drift plus a gentle parallax lean toward the cursor.
-    const targetY = Math.sin(t * 0.22) * 0.38 + p.x * 0.42
-    const targetX = Math.sin(t * 0.17) * 0.09 - p.y * 0.26
+    const s = scroll.current ?? 0
+
+    // Drei Anteile, bewusst getrennt: der Eigendrift haelt die Marke lebendig,
+    // wenn niemand etwas tut; die Maus-Parallaxe reagiert auf Anwesenheit; der
+    // Scrollanteil koppelt sie an die Seite. Ohne den dritten lief das Z im Hero
+    // unbeeindruckt weiter, waehrend sich alles andere bewegte.
+    // Der Scrollanteil wird gedaempft (sqrt): linear drehte die Marke ueber die
+    // Profilkante hinaus und zeigte danach WIEDER mehr Flaeche — gemessen stieg
+    // die gerenderte Pixelzahl am Ende des Hero von 733 auf 1148 zurueck.
+    const sEase = Math.sqrt(s)
+    const targetY = Math.sin(t * 0.22) * 0.38 + p.x * 0.42 + sEase * 1.5
+    const targetX = Math.sin(t * 0.17) * 0.09 - p.y * 0.26 + sEase * 0.32
     group.current.rotation.y = THREE.MathUtils.damp(group.current.rotation.y, targetY, 3, delta)
     group.current.rotation.x = THREE.MathUtils.damp(group.current.rotation.x, targetX, 3, delta)
+
+    // Beim Wegscrollen zurueckweichen statt nur nach oben zu rutschen. Gemessen
+    // ueber die gerenderte Flaeche: mit -0.85 waren es 13 % Unterschied ueber den
+    // ganzen Hero, also praktisch unsichtbar.
+    const targetZ = -sEase * 1.9
+    group.current.position.z = THREE.MathUtils.damp(group.current.position.z, targetZ, 4.5, delta)
   })
 
   return (
@@ -66,6 +87,28 @@ function Stage() {
 
 export function ZMarkCanvas() {
   const pointer = useRef({ x: 0, y: 0 })
+  // Als Ref statt State: dieser Wert aendert sich bei jedem Scroll-Frame, ein
+  // Re-Render pro Frame wuerde den Canvas unnoetig neu aufbauen.
+  const scroll = useRef(0)
+
+  useEffect(() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let frame = 0
+    const update = () => {
+      frame = 0
+      // 0 oben, 1 wenn der Hero eine Fensterhoehe weit durchgelaufen ist.
+      scroll.current = Math.max(0, Math.min(1, window.scrollY / innerHeight))
+    }
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+    update()
+    addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      removeEventListener('scroll', onScroll)
+      if (frame) cancelAnimationFrame(frame)
+    }
+  }, [])
 
   return (
     <div
@@ -92,7 +135,7 @@ export function ZMarkCanvas() {
         <directionalLight position={[-4, 1.5, -4]} intensity={2.3} color="#ff5a4a" />
         <directionalLight position={[-3, -1, 2]} intensity={0.5} color="#8fb0ff" />
         <ambientLight intensity={0.08} />
-        <Mark pointer={pointer} />
+        <Mark pointer={pointer} scroll={scroll} />
         <ContactShadows position={[0, -0.95, 0]} opacity={0.38} scale={5} blur={2.8} far={2.2} />
       </Canvas>
     </div>
