@@ -166,6 +166,13 @@ export function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
   )
 }
 
+/** Stellt den Vite-Basispfad voran. Unter GitHub Pages liegt die Seite in einem
+ *  Unterpfad (/kurt/), ein Pfad wie "/img/foo.webp" zeigt dort ins Leere. Die
+ *  Pfade in site.ts bleiben absolut: sie beschreiben die Lage innerhalb der
+ *  Seite, nicht die vollstaendige URL. */
+export const asset = (path: string) =>
+  `${import.meta.env.BASE_URL.replace(/\/$/, '')}${path}`
+
 /** Responsive picture over the AVIF/WebP set produced by scripts/optimize-images.mjs.
  *  `base` is the path without width or extension, e.g. "/img/kuehltransport".
  *  The widths come from the generated manifest rather than a hardcoded list, because a
@@ -186,13 +193,14 @@ export function Picture({
   loading?: 'lazy' | 'eager'
 }) {
   const widths = widthsFor(base)
-  const set = (ext: string) => widths.map((w) => `${base}-${w}.${ext} ${w}w`).join(', ')
+  const set = (ext: string) =>
+    widths.map((w) => `${asset(base)}-${w}.${ext} ${w}w`).join(', ')
   return (
     <picture className={className}>
       <source type="image/avif" srcSet={set('avif')} sizes={sizes} />
       <source type="image/webp" srcSet={set('webp')} sizes={sizes} />
       <img
-        src={`${base}-${widths[widths.length - 1]}.webp`}
+        src={`${asset(base)}-${widths[widths.length - 1]}.webp`}
         alt={alt}
         loading={loading}
         decoding="async"

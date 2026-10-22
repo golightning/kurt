@@ -5,7 +5,7 @@ import { RouteLine } from '@/components/RouteLine'
 import { TrailerScale } from '@/components/TrailerScale'
 import { StackReveal } from '@/components/StackReveal'
 import { ScrollCounter, ScrollProgressAnchor } from '@/components/ScrollCounter'
-import { Picture, Reveal, Section } from '@/components/ui'
+import { asset, Picture, Reveal, Section } from '@/components/ui'
 import {
   certifications,
   isCurrentlyCertified,
@@ -330,15 +330,15 @@ function Zertifikate() {
                  groessere Fassung existiert nicht, deshalb der direkte Link
                  statt eines Dialogs, der nichts Zusaetzliches zeigen koennte. */
               <a
-                href={`${c.image}-full.webp`}
+                href={asset(`${c.image}-full.webp`)}
                 target="_blank"
                 rel="noopener"
                 className="group block w-20 shrink-0 md:w-28"
                 aria-label={`Zertifikat ${c.code} in lesbarer Größe öffnen`}
               >
                 <img
-                  src={`${c.image}-420.webp`}
-                  srcSet={`${c.image}-420.webp 1x, ${c.image}-840.webp 2x`}
+                  src={asset(`${c.image}-420.webp`)}
+                  srcSet={`${asset(`${c.image}-420.webp`)} 1x, ${asset(`${c.image}-840.webp`)} 2x`}
                   alt={`Zertifikat ${c.code} für ${c.scope ?? ''}, ausgestellt von ${c.issuer ?? ''}`}
                   width={420}
                   height={594}
@@ -361,7 +361,7 @@ function Zertifikate() {
       <Reveal className="mt-12">
         <div className="reveal grid items-center gap-x-12 gap-y-6 md:grid-cols-[minmax(0,20rem)_1fr]">
           <img
-            src={`${partnership.logo}.webp`}
+            src={asset(`${partnership.logo}.webp`)}
             alt={`${partnership.role} des ${partnership.name}`}
             width={500}
             height={150}

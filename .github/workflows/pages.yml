@@ -1,0 +1,61 @@
+name: Demo auf GitHub Pages
+
+# Nur von Hand ausloesen. Die Demo enthaelt echte Unternehmensdaten des Kunden
+# (Zertifikatsscans mit Registriernummern, Anschrift, Telefon). Ein Push soll
+# das nicht automatisch veroeffentlichen.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Laufende Veroeffentlichung nicht abbrechen, aber auch nicht doppelt starten.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build fuer den Unterpfad, mit noindex
+        env:
+          # Pages liefert unter https://<user>.github.io/<repo>/ aus.
+          BASE_PATH: /${{ github.event.repository.name }}/
+          SITE_ORIGIN: https://${{ github.repository_owner }}.github.io
+          # Vorschau: robots.txt sperrt alles, jede Seite traegt noindex.
+          NOINDEX: '1'
+        run: npm run build
+
+      - name: Pruefen, dass die Sperre wirklich drin ist
+        run: |
+          grep -q 'Disallow: /' dist/robots.txt || { echo 'robots.txt sperrt nicht'; exit 1; }
+          grep -q 'name="robots" content="noindex' dist/index.html || { echo 'noindex fehlt'; exit 1; }
+          test -f dist/404.html || { echo '404.html fehlt'; exit 1; }
+          echo 'Sperre und 404-Seite vorhanden.'
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -7,7 +7,10 @@ import '@/index.css'
 const root = document.getElementById('root')!
 const tree = (
   <StrictMode>
-    <BrowserRouter>
+    {/* basename: unter GitHub Pages liegt die App in /kurt/. Ohne das haelt der
+        Router "/kurt/leistungen" fuer eine unbekannte Route und zeigt die
+        404-Seite. import.meta.env.BASE_URL kommt aus vite.config. */}
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <App />
     </BrowserRouter>
   </StrictMode>

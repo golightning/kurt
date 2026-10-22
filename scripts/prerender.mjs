@@ -8,16 +8,25 @@ import { pages, organizationJsonLd, SITE_URL } from '../dist-ssr/meta.js'
 import { render } from '../dist-ssr/entry-server.js'
 
 const DIST = 'dist'
+// Unter GitHub Pages liegt die Seite unter /kurt/ und auf einer anderen Domain.
+// Canonical, Sitemap und og:image muessen dorthin zeigen, sonst verweisen sie
+// auf kurt-transport.com — also auf die Seite des Kunden.
+const BASE = (process.env.BASE_PATH ?? '/').replace(/\/$/, '')
+const SITE = process.env.SITE_ORIGIN ?? SITE_URL
+const url = (path) => `${SITE}${BASE}${path === '/' ? '/' : path}`
 const shell = await readFile(join(DIST, 'index.html'), 'utf8')
 
 const esc = (s) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
 const headFor = (page) => {
-  const canonical = `${SITE_URL}${page.path === '/' ? '' : page.path}`
+  const canonical = url(page.path)
   return [
     `<meta name="description" content="${esc(page.description)}" />`,
     `<link rel="canonical" href="${canonical}" />`,
+    ...(process.env.NOINDEX === '1'
+      ? [`<meta name="robots" content="noindex, nofollow" />`]
+      : []),
     `<meta property="og:type" content="website" />`,
     `<meta property="og:site_name" content="KURT Internationale Transporte GmbH" />`,
     `<meta property="og:locale" content="de_DE" />`,
@@ -26,12 +35,12 @@ const headFor = (page) => {
     `<meta property="og:url" content="${canonical}" />`,
     // og:image fehlte: beim Teilen in WhatsApp, LinkedIn oder Slack blieb die
     // Vorschau leer. 1200x630 ist das Format, das alle gaengigen Dienste erwarten.
-    `<meta property="og:image" content="${SITE_URL}/og-image.png" />`,
+    `<meta property="og:image" content="${SITE}${BASE}/og-image.png" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,
     `<meta property="og:image:alt" content="KURT Internationale Transporte GmbH — Ganzheitliche Logistikloesungen aus Ulm" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
-    `<meta name="twitter:image" content="${SITE_URL}/og-image.png" />`,
+    `<meta name="twitter:image" content="${SITE}${BASE}/og-image.png" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
     `<script type="application/ld+json">${JSON.stringify(organizationJsonLd)}</script>`,
   ].join('\n    ')
@@ -76,7 +85,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 ${pages
   .map(
     (p) =>
-      `  <url><loc>${SITE_URL}${p.path === '/' ? '/' : p.path}</loc><changefreq>monthly</changefreq><priority>${p.path === '/' ? '1.0' : '0.8'}</priority></url>`,
+      `  <url><loc>${url(p.path)}</loc><changefreq>monthly</changefreq><priority>${p.path === '/' ? '1.0' : '0.8'}</priority></url>`,
   )
   .join('\n')}
 </urlset>
@@ -84,7 +93,12 @@ ${pages
 await writeFile(join(DIST, 'sitemap.xml'), sitemap)
 await writeFile(
   join(DIST, 'robots.txt'),
-  `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`,
+  // Auf einer Vorschau-Veroeffentlichung (Pages) darf nichts indexiert werden:
+  // die Demo enthaelt die echten Unternehmensdaten und wuerde sonst neben der
+  // Seite des Kunden in den Suchergebnissen auftauchen.
+  process.env.NOINDEX === '1'
+    ? `User-agent: *\nDisallow: /\n`
+    : `User-agent: *\nAllow: /\n\nSitemap: ${SITE}${BASE}/sitemap.xml\n`,
 )
 
 // 404.html: die meisten statischen Hoster (Netlify, Vercel, GitHub Pages,
