@@ -47,9 +47,15 @@ function MarkGround({ side = 'right' }: { side?: 'left' | 'right' }) {
   )
 }
 
+/** Keine feste Bildschirmhoehe auf kleinen Geraeten: Text (~460px) plus
+ *  3D-Buehne (42svh) plus Abstand brauchen bei 440x956 rund 900px, das Grid bot
+ *  aber nur 876. Mit `items-center` wurde der Ueberlauf nach OBEN aus dem Bild
+ *  geschoben — die Headline verschwand, die Buttons klebten am oberen Rand
+ *  (gemeldet vom iPhone 17 Pro Max). Ab `md` ist genug Platz, dort bleibt die
+ *  volle Hoehe erhalten. */
 function Hero() {
   return (
-    <section className="relative min-h-[100svh] overflow-hidden pt-20">
+    <section className="relative overflow-hidden pt-20 md:min-h-[100svh]">
       {/* Roter Schein hinter der Marke — die einzige grosse Farbflaeche der Seite. */}
       <div
         aria-hidden="true"
@@ -57,8 +63,8 @@ function Hero() {
         style={{ background: 'radial-gradient(circle, #e20613 0%, transparent 65%)' }}
       />
 
-      <div className="shell relative grid min-h-[calc(100svh-5rem)] items-center gap-10 lg:grid-cols-[1.6fr_1fr] [&>*]:min-w-0">
-        <div className="relative z-10 py-16">
+      <div className="shell relative grid items-center gap-8 py-10 md:min-h-[calc(100svh-5rem)] md:gap-10 md:py-0 lg:grid-cols-[1.6fr_1fr] [&>*]:min-w-0">
+        <div className="relative z-10 py-4 md:py-16">
           <h1 className="text-[clamp(2.1rem,6.2vw,5rem)] leading-[1.0] md:leading-[0.95]">
             Ganzheitliche
             <br />
@@ -91,7 +97,7 @@ function Hero() {
           </p>
         </div>
 
-        <ZMarkStage className="relative h-[42svh] w-full lg:h-[80svh]" />
+        <ZMarkStage className="relative h-[32svh] w-full md:h-[42svh] lg:h-[80svh]" />
       </div>
     </section>
   )
