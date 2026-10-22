@@ -18,15 +18,40 @@ function Mark({
   scroll: React.RefObject<number>
 }) {
   const group = useRef<THREE.Group>(null)
-  const model = useMemo(() => {
+  const { camera, size } = useThree()
+
+  const { model, radius } = useMemo(() => {
     const m = createKURTZBrandMarkModel()
     // The factory centres on the red bounding box; the slate ribbon hangs below and to
     // the right, so recentre on the full lockup or the mark sits high in frame.
     const box = new THREE.Box3().setFromObject(m)
     const c = box.getCenter(new THREE.Vector3())
     m.position.set(-c.x, -c.y, -c.z)
-    return m
+    const sz = box.getSize(new THREE.Vector3())
+    return { model: m, radius: Math.max(sz.x, sz.y) / 2 }
   }, [])
+
+  /** Die Marke auf die Buehne skalieren statt fest auf 0.98.
+   *
+   *  Mit fester Skalierung und fester Kamera fuellte sie auf dem Desktop den
+   *  Rahmen, blieb auf dem Telefon aber winzig: die Buehne ist dort nur 32svh
+   *  hoch, und three.js haelt das vertikale Sichtfeld konstant — der sichtbare
+   *  Ausschnitt schrumpft also mit der Hoehe, das Modell nicht.
+   *
+   *  Jetzt wird gemessen, wie viel Welt bei der aktuellen Canvas-Groesse ins
+   *  Bild passt, und das Modell darauf eingepasst. */
+  useEffect(() => {
+    const g = group.current
+    if (!g || !radius) return
+    const cam = camera as THREE.PerspectiveCamera
+    const dist = cam.position.z
+    const vFov = (cam.fov * Math.PI) / 180
+    const halfH = Math.tan(vFov / 2) * dist
+    const halfW = halfH * (size.width / Math.max(1, size.height))
+    // 0.86: etwas Luft lassen, damit die Drehung nicht anschneidet.
+    const s = (Math.min(halfW, halfH) / radius) * 0.86
+    g.scale.setScalar(s)
+  }, [camera, radius, size.width, size.height])
 
   useFrame((state, delta) => {
     if (!group.current) return
@@ -55,7 +80,7 @@ function Mark({
   })
 
   return (
-    <group ref={group} scale={0.98}>
+    <group ref={group}>
       <primitive object={model} />
     </group>
   )
