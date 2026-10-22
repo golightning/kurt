@@ -1,43 +1,70 @@
-KURT Internationale Transporte — Website-Demo
-=============================================
+KURT Internationale Transporte GmbH — Werbeclip
+===============================================
+
+WICHTIG: Absender ist das Unternehmen, nicht der Entwickler.
+Kein Wort über Website, Demo, Bytes oder Ladezeiten. Wer den Clip sieht,
+soll KURT beauftragen wollen — nicht über Webdesign nachdenken.
 
 Dateien
 -------
-brag.mp4            1920×1080, 20s — Desktop / X / LinkedIn
-brag-vertical.mp4   1080×1920, 20s — Reels, Stories, TikTok
-brag.jpg            Posterbild quer (auch als Frame 0 eingebacken)
-brag-vertical.jpg   Posterbild hoch
+brag.mp4            1920×1080, 25s — LinkedIn, Website-Header, Messe-Display
+brag-vertical.mp4   1080×1920, 25s — Reels, Stories, TikTok, WhatsApp-Status
+brag.jpg            Posterbild quer   (als Frame 0 eingebacken)
+brag-vertical.jpg   Posterbild hoch   (als Frame 0 eingebacken)
 
-Beide Videos tragen das Poster als Frame 0: Slack, X und Discord ziehen sich
-ihr Vorschaubild selbst und greifen fast immer Frame 0 ab.
-
-
-Kurz (X / Discord)
-------------------
-Eine Spedition in Ulm fährt mit einer Website von 2021.
-Ich hab ihr eine neue gebaut — inklusive ihres Logos als echtes 3D-Modell,
-rekonstruiert aus ihrer eigenen Bilddatei.
-
-136.243 → 9.688 Bytes.
+Beide Videos tragen das Posterbild als Frame 0: Slack, LinkedIn und WhatsApp
+ziehen ihr Vorschaubild selbst und greifen fast immer Frame 0 ab. Statt eines
+schwarzen Startbilds steht dort das Fahrzeug mit der eigenen Beschriftung.
 
 
-Länger (LinkedIn)
------------------
-Die Website einer Ulmer Spedition: keine Meta-Description, keine Sitemap, kein
-h1. 9,87 MB Bilder auf der Startseite. Die Zertifikate liegen als Scans mit
-leerem alt-Attribut im Footer — für Google existieren sie nicht.
+LinkedIn / Unternehmensseite
+----------------------------
+Von Ulm bis Istanbul.
 
-Ich habe eine Demo gebaut, bevor ich angefragt habe. Fünf Seiten, vorgerendert,
-109 KB kritischer Pfad. Das Firmenlogo als 3D-Modell, aus den gemessenen
-Konturen des Originals rekonstruiert statt nachgezeichnet.
+Seit über 30 Jahren fahren wir Komplett- und Teilladungen durch West- und
+Zentraleuropa bis in die Türkei und nach Griechenland.
 
-Keine Behauptungen im Video, nur Belege: die Relation Ulm–Istanbul als
-gezeichnete Linie, der Auflieger mit echter Bemaßung, die Zertifikate mit
-Registriernummer und Laufzeit.
+Was uns Kunden bringen, passt selten auf eine Standardpalette: hängende
+Fertigbekleidung im Textil-Koffersattel nach XL-CODE, 13,60 m Ladelänge bei
+2,75 m lichter Innenhöhe. Temperaturgeführte Ware mit lückenloser
+Protokollierung. Filialen ohne Rampe, die wir über die Hebebühne ebenerdig
+beliefern.
 
-136.243 → 9.688 Bytes. Bilder 9,87 MB → 0,55 MB.
+Dazu eine feste Ansprechperson, die Ihren Auftrag kennt — Mo bis Fr, 7 bis 17 Uhr.
+
+Angebot: kurt-transport.com · +49 731 401 700
+
+#Spedition #Logistik #Ulm #Transport #Fuhrpark
+
+
+Kurz (Reels / Stories / WhatsApp)
+---------------------------------
+Von Ulm bis Istanbul. 🇩🇪🇹🇷
+
+13,60 m Ladelänge. 2,75 m Innenhöhe. Hängende Bekleitung, temperaturgeführt,
+Schwer- und Sondertransport.
+
+Seit über 30 Jahren aus Ulm.
+→ kurt-transport.com
 
 
 Ein Satz
 --------
-Ich hab einer Spedition eine Website gebaut, bevor sie mich gefragt hat.
+Fracht, die nicht auf eine Standardpalette passt — seit über 30 Jahren von
+Ulm bis Istanbul.
+
+
+Inhalte im Clip (alle belegt)
+-----------------------------
+Relation         Ulm · München · Wien · Budapest · Belgrad · Istanbul,
+                 Abzweig Thessaloniki
+Maße             13,60 m Ladelänge, 2,75 m lichte Innenhöhe, XL-CODE
+Leistungen       Filialbelieferung ohne Rampe · Bekleidung hängend bis 3-fach ·
+                 temperaturgeführt (Frische/TK) · Schwer- und Sondertransport
+Nachweise        ISO 9001 · IFS Logistics · Businesspartner SSV Ulm 1846
+Erreichbarkeit   feste Ansprechperson, Mo – Fr 7 – 17 Uhr
+Kontakt          kurt-transport.com · +49 731 401 700
+
+Hinweis zum IFS-Nachweis: Die hinterlegte Bestätigung lief am 09.05.2025 aus,
+ein Nachfolgedokument liegt nicht vor. Vor einer bezahlten Ausspielung sollte
+der aktuelle Stand beim Inhaber bestätigt werden (siehe docs/PITCH.md).
