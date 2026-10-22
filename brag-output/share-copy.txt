@@ -1,0 +1,43 @@
+KURT Internationale Transporte — Website-Demo
+=============================================
+
+Dateien
+-------
+brag.mp4            1920×1080, 20s — Desktop / X / LinkedIn
+brag-vertical.mp4   1080×1920, 20s — Reels, Stories, TikTok
+brag.jpg            Posterbild quer (auch als Frame 0 eingebacken)
+brag-vertical.jpg   Posterbild hoch
+
+Beide Videos tragen das Poster als Frame 0: Slack, X und Discord ziehen sich
+ihr Vorschaubild selbst und greifen fast immer Frame 0 ab.
+
+
+Kurz (X / Discord)
+------------------
+Eine Spedition in Ulm fährt mit einer Website von 2021.
+Ich hab ihr eine neue gebaut — inklusive ihres Logos als echtes 3D-Modell,
+rekonstruiert aus ihrer eigenen Bilddatei.
+
+136.243 → 9.688 Bytes.
+
+
+Länger (LinkedIn)
+-----------------
+Die Website einer Ulmer Spedition: keine Meta-Description, keine Sitemap, kein
+h1. 9,87 MB Bilder auf der Startseite. Die Zertifikate liegen als Scans mit
+leerem alt-Attribut im Footer — für Google existieren sie nicht.
+
+Ich habe eine Demo gebaut, bevor ich angefragt habe. Fünf Seiten, vorgerendert,
+109 KB kritischer Pfad. Das Firmenlogo als 3D-Modell, aus den gemessenen
+Konturen des Originals rekonstruiert statt nachgezeichnet.
+
+Keine Behauptungen im Video, nur Belege: die Relation Ulm–Istanbul als
+gezeichnete Linie, der Auflieger mit echter Bemaßung, die Zertifikate mit
+Registriernummer und Laufzeit.
+
+136.243 → 9.688 Bytes. Bilder 9,87 MB → 0,55 MB.
+
+
+Ein Satz
+--------
+Ich hab einer Spedition eine Website gebaut, bevor sie mich gefragt hat.

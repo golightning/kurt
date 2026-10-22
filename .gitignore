@@ -6,3 +6,9 @@ dist
 dist-ssr
 .img2threejs
 *.tsbuildinfo
+
+# brag: Rohaufnahmen und Hyperframes-Artefakte, die sich neu erzeugen lassen
+brag-output/shots/
+brag-output/composition/*/renders/
+brag-output/composition/*/.hyperframes/
+brag-output/composition/*/node_modules/
