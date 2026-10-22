@@ -97,7 +97,13 @@ function Hero() {
           </p>
         </div>
 
-        <ZMarkStage className="relative h-[32svh] w-full md:h-[42svh] lg:h-[80svh]" />
+        {/* Hoehe auf dem Telefon aus dem Viewport ABZUEGLICH des Textes, nicht als
+            feste 32svh: gemessen begann die Buehne bei y=655 und war 306 px hoch,
+            endete also bei 961 — bei 956 px Fensterhoehe. Die untersten Pixel lagen
+            ausserhalb des Bildes, und weil die Marke die Buehne zu 86 % fuellt,
+            wurde das graue Band unten angeschnitten. min() deckelt zusaetzlich,
+            damit sie auf sehr hohen Telefonen nicht ins Riesige waechst. */}
+        <ZMarkStage className="relative h-[min(32svh,calc(100svh-45rem))] min-h-[13rem] w-full md:h-[42svh] lg:h-[80svh]" />
       </div>
     </section>
   )

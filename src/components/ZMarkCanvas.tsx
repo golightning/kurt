@@ -1,168 +1,176 @@
-import { useMemo, useRef, useEffect } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { ContactShadows } from '@react-three/drei'
+import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import {
   createKURTZBrandMarkModel,
   createKURTZBrandMarkEnvironment,
 } from '@/three/createKurtZMarkModel'
 
-/** The mark itself. The geometry comes from the generated factory, which extrudes the
- *  contours measured off the original logo raster — so this is the client's own mark in
- *  three dimensions, not a lookalike. */
-function Mark({
-  pointer,
-  scroll,
-}: {
-  pointer: React.RefObject<{ x: number; y: number }>
-  scroll: React.RefObject<number>
-}) {
-  const group = useRef<THREE.Group>(null)
-  const { camera, size } = useThree()
-
-  const { model, radius } = useMemo(() => {
-    const m = createKURTZBrandMarkModel()
-    // The factory centres on the red bounding box; the slate ribbon hangs below and to
-    // the right, so recentre on the full lockup or the mark sits high in frame.
-    const box = new THREE.Box3().setFromObject(m)
-    const c = box.getCenter(new THREE.Vector3())
-    m.position.set(-c.x, -c.y, -c.z)
-    const sz = box.getSize(new THREE.Vector3())
-    return { model: m, radius: Math.max(sz.x, sz.y) / 2 }
-  }, [])
-
-  /** Die Marke auf die Buehne skalieren statt fest auf 0.98.
-   *
-   *  Mit fester Skalierung und fester Kamera fuellte sie auf dem Desktop den
-   *  Rahmen, blieb auf dem Telefon aber winzig: die Buehne ist dort nur 32svh
-   *  hoch, und three.js haelt das vertikale Sichtfeld konstant — der sichtbare
-   *  Ausschnitt schrumpft also mit der Hoehe, das Modell nicht.
-   *
-   *  Jetzt wird gemessen, wie viel Welt bei der aktuellen Canvas-Groesse ins
-   *  Bild passt, und das Modell darauf eingepasst. */
-  useEffect(() => {
-    const g = group.current
-    if (!g || !radius) return
-    const cam = camera as THREE.PerspectiveCamera
-    const dist = cam.position.z
-    const vFov = (cam.fov * Math.PI) / 180
-    const halfH = Math.tan(vFov / 2) * dist
-    const halfW = halfH * (size.width / Math.max(1, size.height))
-    // 0.86: etwas Luft lassen, damit die Drehung nicht anschneidet.
-    const s = (Math.min(halfW, halfH) / radius) * 0.86
-    g.scale.setScalar(s)
-  }, [camera, radius, size.width, size.height])
-
-  useFrame((state, delta) => {
-    if (!group.current) return
-    const t = state.clock.elapsedTime
-    const p = pointer.current ?? { x: 0, y: 0 }
-    const s = scroll.current ?? 0
-
-    // Drei Anteile, bewusst getrennt: der Eigendrift haelt die Marke lebendig,
-    // wenn niemand etwas tut; die Maus-Parallaxe reagiert auf Anwesenheit; der
-    // Scrollanteil koppelt sie an die Seite. Ohne den dritten lief das Z im Hero
-    // unbeeindruckt weiter, waehrend sich alles andere bewegte.
-    // Der Scrollanteil wird gedaempft (sqrt): linear drehte die Marke ueber die
-    // Profilkante hinaus und zeigte danach WIEDER mehr Flaeche — gemessen stieg
-    // die gerenderte Pixelzahl am Ende des Hero von 733 auf 1148 zurueck.
-    const sEase = Math.sqrt(s)
-    const targetY = Math.sin(t * 0.22) * 0.38 + p.x * 0.42 + sEase * 1.5
-    const targetX = Math.sin(t * 0.17) * 0.09 - p.y * 0.26 + sEase * 0.32
-    group.current.rotation.y = THREE.MathUtils.damp(group.current.rotation.y, targetY, 3, delta)
-    group.current.rotation.x = THREE.MathUtils.damp(group.current.rotation.x, targetX, 3, delta)
-
-    // Beim Wegscrollen zurueckweichen statt nur nach oben zu rutschen. Gemessen
-    // ueber die gerenderte Flaeche: mit -0.85 waren es 13 % Unterschied ueber den
-    // ganzen Hero, also praktisch unsichtbar.
-    const targetZ = -sEase * 1.9
-    group.current.position.z = THREE.MathUtils.damp(group.current.position.z, targetZ, 4.5, delta)
-  })
-
-  return (
-    <group ref={group}>
-      <primitive object={model} />
-    </group>
-  )
-}
-
-/** Khronos PBR Neutral instead of ACES. ACES is a film look and pushes a saturated
- *  primary red toward salmon — measured during the model review: the brand's #e20613
- *  rendered visibly orange until this was changed. Neutral preserves brand colour.
+/** Die 3D-Marke, auf reinem three.js.
  *
- *  The environment is generated locally from three's RoomEnvironment. drei's
- *  `<Environment preset>` fetches an HDR from a CDN, which leaves the Suspense
- *  boundary pending forever behind a strict network and renders an empty canvas. */
-function Stage() {
-  const { gl, scene } = useThree()
+ *  Vorher lief das ueber @react-three/fiber plus drei (ContactShadows,
+ *  Environment). Auf dem iPhone blieb die Buehne dadurch leer oder zeigte nur
+ *  kurz etwas: der Brocken aus three + fiber + drei liegt bei 239 KB gzip und
+ *  muss ueber Mobilfunk vollstaendig da sein, bevor ueberhaupt ein Bild
+ *  entsteht. Dazu kam ein weicher Schattenpass (ContactShadows) jedes Frame,
+ *  den die Szene gar nicht braucht — sie steht frei auf dunklem Grund.
+ *
+ *  Das Gegenstueck im Schwesterprojekt (3D-Blitz) laeuft seit jeher auf purem
+ *  three.js und funktioniert auf dem Telefon. Dieselbe Bauweise jetzt hier:
+ *  ein Renderer, eine Kamera, eine Schleife, kein React im Frame.
+ *
+ *  Die Modellfabrik bleibt unveraendert — die Geometrie stammt weiterhin aus
+ *  den gemessenen Konturen des Originallogos. */
+export function ZMarkCanvas() {
+  const ref = useRef<HTMLCanvasElement>(null)
+
   useEffect(() => {
-    gl.toneMapping = THREE.NeutralToneMapping
-    gl.toneMappingExposure = 0.62
-    gl.outputColorSpace = THREE.SRGBColorSpace
-    const env = createKURTZBrandMarkEnvironment(gl)
+    const canvas = ref.current
+    if (!canvas) return
+
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
+    // Auf 2 deckeln: das iPhone meldet 3, was die Pixelzahl gegenueber 2 noch
+    // einmal verdoppelt, ohne auf dieser Groesse sichtbar zu sein.
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
+    // Khronos PBR Neutral statt ACES: ACES ist ein Filmlook und zieht ein
+    // gesaettigtes Primaerrot Richtung Lachs — das Markenrot #e20613 wurde
+    // sichtbar orange, bis das umgestellt war.
+    renderer.toneMapping = THREE.NeutralToneMapping
+    renderer.toneMappingExposure = 0.62
+    renderer.outputColorSpace = THREE.SRGBColorSpace
+
+    const scene = new THREE.Scene()
+    const env = createKURTZBrandMarkEnvironment(renderer)
     scene.environment = env
     scene.environmentIntensity = 0.5
+
+    const key = new THREE.DirectionalLight(0xffffff, 2.1)
+    key.position.set(3, 4, 5)
+    const rim = new THREE.DirectionalLight(0xff5a4a, 2.3)
+    rim.position.set(-4, 1.5, -4)
+    const fill = new THREE.DirectionalLight(0x8fb0ff, 0.5)
+    fill.position.set(-3, -1, 2)
+    scene.add(key, rim, fill, new THREE.AmbientLight(0xffffff, 0.08))
+
+    const model = createKURTZBrandMarkModel()
+    // Die Fabrik zentriert auf die rote Bounding-Box; das graue Band haengt
+    // darunter und rechts heraus. Ohne Neuzentrierung sitzt die Marke hoch.
+    const box = new THREE.Box3().setFromObject(model)
+    const c = box.getCenter(new THREE.Vector3())
+    model.position.set(-c.x, -c.y, -c.z)
+    const sz = box.getSize(new THREE.Vector3())
+    const radius = Math.max(sz.x, sz.y) / 2
+
+    const holder = new THREE.Group()
+    holder.add(model)
+    scene.add(holder)
+
+    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 50)
+    camera.position.set(0, 0.05, 4.1)
+
+    const pointer = { x: 0, y: 0 }
+    let scroll = 0
+    const current = { rx: 0, ry: 0, z: 0 }
+    let raf = 0
+    let running = false
+    const start = performance.now()
+
+    /** Die Marke auf die Buehne einpassen statt fest zu skalieren.
+     *  three.js haelt das vertikale Sichtfeld konstant: auf dem Telefon ist die
+     *  Buehne nur 32svh hoch, der sichtbare Weltausschnitt schrumpft also mit,
+     *  das Modell nicht. Gemessen wird, wie viel Welt hineinpasst. */
+    const resize = () => {
+      const { width, height } = canvas.getBoundingClientRect()
+      if (!width || !height) return
+      renderer.setSize(width, height, false)
+      camera.aspect = width / height
+      camera.updateProjectionMatrix()
+      const halfH = Math.tan((camera.fov * Math.PI) / 360) * camera.position.z
+      const halfW = halfH * camera.aspect
+      // 0.86: etwas Luft, damit die Drehung nicht anschneidet.
+      holder.scale.setScalar((Math.min(halfW, halfH) / radius) * 0.86)
+    }
+
+    const draw = () => {
+      const t = (performance.now() - start) / 1000
+      // Der Scrollanteil wird gedaempft (sqrt): linear drehte die Marke ueber
+      // die Profilkante hinaus und zeigte danach wieder mehr Flaeche.
+      const sEase = Math.sqrt(scroll)
+      const tgY = reduced ? 0 : Math.sin(t * 0.22) * 0.38 + pointer.x * 0.42 + sEase * 1.5
+      const tgX = reduced ? 0 : Math.sin(t * 0.17) * 0.09 - pointer.y * 0.26 + sEase * 0.32
+      const tgZ = reduced ? 0 : -sEase * 1.9
+      const k = reduced ? 1 : 0.08
+      current.ry += (tgY - current.ry) * k
+      current.rx += (tgX - current.rx) * k
+      current.z += (tgZ - current.z) * k
+      holder.rotation.set(current.rx, current.ry, 0)
+      holder.position.z = current.z
+      renderer.render(scene, camera)
+    }
+
+    const loop = () => {
+      if (!running) return
+      draw()
+      raf = requestAnimationFrame(loop)
+    }
+
+    resize()
+    draw()
+
+    const onScroll = () => {
+      scroll = Math.max(0, Math.min(1, window.scrollY / innerHeight))
+    }
+    const onMove = (e: PointerEvent) => {
+      const r = canvas.getBoundingClientRect()
+      pointer.x = ((e.clientX - r.left) / r.width - 0.5) * 2
+      pointer.y = ((e.clientY - r.top) / r.height - 0.5) * 2
+    }
+    const onResize = () => {
+      resize()
+      draw()
+    }
+
+    // Nur rechnen, solange die Buehne im Bild ist — sonst laeuft auf dem
+    // Telefon eine Render-Schleife weiter, waehrend man die Seite liest.
+    const io = new IntersectionObserver(([entry]) => {
+      const visible = entry.isIntersecting
+      if (reduced) return
+      if (visible && !running) {
+        running = true
+        raf = requestAnimationFrame(loop)
+      } else if (!visible && running) {
+        running = false
+        cancelAnimationFrame(raf)
+      }
+    })
+    io.observe(canvas)
+
+    if (!reduced) {
+      addEventListener('scroll', onScroll, { passive: true })
+      addEventListener('pointermove', onMove, { passive: true })
+    }
+    addEventListener('resize', onResize)
+
     return () => {
+      running = false
+      cancelAnimationFrame(raf)
+      io.disconnect()
+      removeEventListener('scroll', onScroll)
+      removeEventListener('pointermove', onMove)
+      removeEventListener('resize', onResize)
       scene.environment = null
       env.dispose()
-    }
-  }, [gl, scene])
-  return null
-}
-
-export function ZMarkCanvas() {
-  const pointer = useRef({ x: 0, y: 0 })
-  // Als Ref statt State: dieser Wert aendert sich bei jedem Scroll-Frame, ein
-  // Re-Render pro Frame wuerde den Canvas unnoetig neu aufbauen.
-  const scroll = useRef(0)
-
-  useEffect(() => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    let frame = 0
-    const update = () => {
-      frame = 0
-      // 0 oben, 1 wenn der Hero eine Fensterhoehe weit durchgelaufen ist.
-      scroll.current = Math.max(0, Math.min(1, window.scrollY / innerHeight))
-    }
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(update)
-    }
-    update()
-    addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      removeEventListener('scroll', onScroll)
-      if (frame) cancelAnimationFrame(frame)
+      model.traverse((o) => {
+        const m = o as THREE.Mesh
+        if (m.geometry) m.geometry.dispose()
+        const mat = m.material
+        if (Array.isArray(mat)) mat.forEach((x) => x.dispose())
+        else if (mat) (mat as THREE.Material).dispose()
+      })
+      renderer.dispose()
     }
   }, [])
 
-  return (
-    <div
-      className="h-full w-full"
-      onPointerMove={(e) => {
-        const r = e.currentTarget.getBoundingClientRect()
-        pointer.current = {
-          x: ((e.clientX - r.left) / r.width - 0.5) * 2,
-          y: ((e.clientY - r.top) / r.height - 0.5) * 2,
-        }
-      }}
-      onPointerLeave={() => {
-        pointer.current = { x: 0, y: 0 }
-      }}
-    >
-      <Canvas
-        camera={{ position: [0, 0.05, 4.1], fov: 32 }}
-        dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true }}
-        aria-hidden="true"
-      >
-        <Stage />
-        <directionalLight position={[3, 4, 5]} intensity={2.1} />
-        <directionalLight position={[-4, 1.5, -4]} intensity={2.3} color="#ff5a4a" />
-        <directionalLight position={[-3, -1, 2]} intensity={0.5} color="#8fb0ff" />
-        <ambientLight intensity={0.08} />
-        <Mark pointer={pointer} scroll={scroll} />
-        <ContactShadows position={[0, -0.95, 0]} opacity={0.38} scale={5} blur={2.8} far={2.2} />
-      </Canvas>
-    </div>
-  )
+  return <canvas ref={ref} className="block h-full w-full" aria-hidden="true" />
 }
